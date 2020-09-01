@@ -15,7 +15,6 @@ public class termsandcondition extends AppCompatActivity implements View.OnClick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.termsandconditions);
-        Toast.makeText(this, "logined successfully ", Toast.LENGTH_SHORT).show();
         TextView t1=(TextView) findViewById(R.id.continue1);
         t1.setOnClickListener((View.OnClickListener) this);
 

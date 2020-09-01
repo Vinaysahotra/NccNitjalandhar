@@ -22,4 +22,7 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="invalid">Please enter valid name</string>
+    <string name="mail">entered email does not exist</string>
+    <string name="invalidpassword">length should be greater than six</string>
 </resources>
