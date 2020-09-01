@@ -23,8 +23,10 @@ public class termsandcondition extends AppCompatActivity implements View.OnClick
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.continue1:
+
                 Intent i=  new Intent(termsandcondition.this,gallery.class);
                 startActivity(i);
+                Toast.makeText(getApplicationContext(),"thanks",Toast.LENGTH_SHORT).show();
         }}
 
 }
