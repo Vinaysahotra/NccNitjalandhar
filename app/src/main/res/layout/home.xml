@@ -4,23 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity2">
+    tools:context=".home">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-
-            android:gravity="center_horizontal"
-            app:popupTheme="@style/AppTheme.PopupOverlay"
-            tools:ignore="HardcodedText" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -29,9 +19,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
-        app:srcCompat="@drawable/ic_menu_send" />
+        app:srcCompat="@drawable/ic_round_reorder_24"
+        tools:ignore="VectorDrawableCompat" />
 
-    <include layout="@layout/content_main" />
+    <include
+        android:id="@+id/include"
+        layout="@layout/content_main" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
@@ -42,17 +35,29 @@
         app:srcCompat="@drawable/ic_baseline_call_24"
         tools:ignore="VectorDrawableCompat" />
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+
+        android:gravity="center_horizontal"
+        app:layout_anchor="@+id/include"
+        app:layout_anchorGravity="top|center"
+        app:popupTheme="@style/AppTheme.PopupOverlay"
+        tools:ignore="HardcodedText" />
+
     <TextView
         android:id="@+id/textView3"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="0dp"
+        android:gravity="center_horizontal"
         android:text="Home"
+        android:textAlignment="center"
         android:textColor="#F4EFEF"
         android:textSize="30sp"
-        android:textAlignment="center"
         app:layout_anchor="@+id/appBarLayout"
-        app:layout_anchorGravity="top|center"
-        android:gravity="center_horizontal" />
+        app:layout_anchorGravity="top|center" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

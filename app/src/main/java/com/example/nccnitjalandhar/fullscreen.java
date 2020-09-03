@@ -1,16 +1,11 @@
 package com.example.nccnitjalandhar;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -20,10 +15,8 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import static android.widget.Toast.*;
 
 public class fullscreen extends AppCompatActivity implements View.OnClickListener {
 ImageView imageView;
@@ -81,7 +74,7 @@ ImageView imageView;
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.next) {
-            Intent i = new Intent(fullscreen.this, MainActivity2.class);
+            Intent i = new Intent(fullscreen.this, home.class);
 
             startActivity(i);
         }
