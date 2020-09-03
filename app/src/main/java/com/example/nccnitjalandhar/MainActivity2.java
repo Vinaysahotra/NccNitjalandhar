@@ -32,7 +32,7 @@ public class MainActivity2 extends AppCompatActivity {
                 Snackbar.make(view, "opening dialer", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
 
-                Intent i=new Intent(Intent.ACTION_DIAL, Uri.parse("tel:9877875273"));
+                Intent i=new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"));
                 startActivity(i);
             }
         });
