@@ -26,8 +26,7 @@ public class termsandcondition extends AppCompatActivity implements View.OnClick
 
 };
     private  static final String[]permissionscontacts= {
-            Manifest.permission.READ_CONTACTS,
-            Manifest.permission.WRITE_CONTACTS
+            Manifest.permission.CALL_PHONE
     };
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
@@ -49,7 +48,7 @@ public class termsandcondition extends AppCompatActivity implements View.OnClick
         int permissionread_storage=ActivityCompat.checkSelfPermission(termsandcondition.this,Manifest.permission.READ_EXTERNAL_STORAGE);
 
         int permissionwrite_storage=ActivityCompat.checkSelfPermission(termsandcondition.this,Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        int permission_read_contacts=ActivityCompat.checkSelfPermission(termsandcondition.this,Manifest.permission.READ_CONTACTS);
+        int permission_callphone=ActivityCompat.checkSelfPermission(termsandcondition.this,Manifest.permission.CALL_PHONE);
 
 
         if(permissionread_storage!= PackageManager.PERMISSION_GRANTED) {
@@ -59,17 +58,13 @@ public class termsandcondition extends AppCompatActivity implements View.OnClick
 
 
         }
-
-        if(permission_read_contacts!= PackageManager.PERMISSION_GRANTED) {
+        if(permission_callphone!= PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(termsandcondition.this,
                     permissionscontacts,
-                    0);
+                    1);
             Log.d("verify", "checking permissions");
 
         }
-
-
-
 
     }
 
