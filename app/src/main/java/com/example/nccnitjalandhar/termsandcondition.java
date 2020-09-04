@@ -35,8 +35,8 @@ public class termsandcondition extends AppCompatActivity implements View.OnClick
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.termsandconditions);
-       checkpermissions();
-        TextView t1=(TextView) findViewById(R.id.continue1);
+        checkpermissions();
+        TextView t1= findViewById(R.id.continue1);
 
         t1.setOnClickListener(this);
 
@@ -45,36 +45,28 @@ public class termsandcondition extends AppCompatActivity implements View.OnClick
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     private void checkpermissions(){
 
-        int permissionread_storage=ActivityCompat.checkSelfPermission(termsandcondition.this,Manifest.permission.READ_EXTERNAL_STORAGE);
 
         int permissionwrite_storage=ActivityCompat.checkSelfPermission(termsandcondition.this,Manifest.permission.WRITE_EXTERNAL_STORAGE);
         int permission_callphone=ActivityCompat.checkSelfPermission(termsandcondition.this,Manifest.permission.CALL_PHONE);
 
-
-        if(permissionread_storage!= PackageManager.PERMISSION_GRANTED) {
+        if(permissionwrite_storage!= PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(termsandcondition.this,
                     permissions_storage,
                     1);
 
 
         }
-        if(permission_callphone!= PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(termsandcondition.this,
-                    permissionscontacts,
-                    1);
-            Log.d("verify", "checking permissions");
 
-        }
 
     }
 
 
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.continue1) {
-
-            Intent i = new Intent(termsandcondition.this, gallery.class);
+          Intent i = new Intent(termsandcondition.this, gallery.class);
             startActivity(i);
             Toast.makeText(getApplicationContext(), "thanks", Toast.LENGTH_SHORT).show();
         }

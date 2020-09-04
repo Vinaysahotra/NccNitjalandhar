@@ -42,22 +42,8 @@
         android:background="?attr/colorPrimary"
 
         android:gravity="center_horizontal"
-        app:layout_anchor="@+id/include"
-        app:layout_anchorGravity="top|center"
-        app:popupTheme="@style/AppTheme.PopupOverlay"
-        tools:ignore="HardcodedText" />
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="0dp"
-        android:gravity="center_horizontal"
-        android:text="Home"
-        android:textAlignment="center"
-        android:textColor="#F4EFEF"
-        android:textSize="30sp"
-        app:layout_anchor="@+id/appBarLayout"
-        app:layout_anchorGravity="top|center" />
+
+        tools:ignore="HardcodedText" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
