@@ -5,14 +5,24 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 public class home extends AppCompatActivity {
+NavigationView nav;
+ActionBarDrawerToggle toggle;
+DrawerLayout drawerlayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,18 +31,41 @@ public class home extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
 
         setSupportActionBar(toolbar);
-        FloatingActionButton fab = findViewById(R.id.fab);
+        nav= findViewById(R.id.navmenu);
+        drawerlayout =findViewById(R.id.drawer);
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "opening dialer", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+toggle=new ActionBarDrawerToggle(this,drawerlayout,toolbar,R.string.open,R.string.close);
+drawerlayout.addDrawerListener(toggle);
+toggle.syncState();
+nav.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-                Intent i=new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"));
+        switch (item.getItemId()){
+
+            case R.id.menu_home:
+                Toast.makeText(getApplicationContext(),"home opened",Toast.LENGTH_LONG).show();
+                drawerlayout.closeDrawer(GravityCompat.START);
+                break;
+            case R.id.menu_gallery:
+                Toast.makeText(getApplicationContext(),"gallery opened",Toast.LENGTH_LONG).show();
+                drawerlayout.closeDrawer(GravityCompat.START);
+                Intent i=new Intent(home.this,gallery.class);
                 startActivity(i);
-            }
-        });
+                break;
+            case R.id.menu_pdf:
+                Toast.makeText(getApplicationContext(),"pdfs opened",Toast.LENGTH_LONG).show();
+                drawerlayout.closeDrawer(GravityCompat.START);
+                break;
+            case R.id.menu_contacts:
+                Toast.makeText(getApplicationContext(),"contacts opened",Toast.LENGTH_LONG).show();
+                drawerlayout.closeDrawer(GravityCompat.START);
+                break;
+
+        }
+        return true;
+    }
+});
 
     }
 }

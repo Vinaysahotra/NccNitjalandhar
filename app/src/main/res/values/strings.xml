@@ -3,10 +3,9 @@
     <string name="_1_i_promise_that_i_will_honestly_and_faithfully_serve_my_country_and_abide_by_the_rules_and_regulations_of_the_national_cadet_corps_that_i_will_do_not_best_of_my_ability_all_parades_and_camps_as_may_be_required_by_the_commanding_officer_from_time_to_time">1. I .Promise that I will honestly and faithfully serve my country and abide by the Rules and Regulations of the National Cadet Corps that I will do not best of my ability all parades and camps as may be required by the Commanding Officer from time to time.</string>
     <string name="i_have_read_terms_and_conditions">I have read terms and conditions</string>
     <string name="title_activity_home">home</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
+
+
+
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
@@ -15,8 +14,7 @@
     <string name="menu_slideshow">Slideshow</string>
     <string name="title_activity_main2">MainActivity</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
+
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
@@ -25,4 +23,11 @@
     <string name="invalid">Please enter valid name</string>
     <string name="mail">entered email does not exist</string>
     <string name="invalidpassword">length should be greater than six</string>
+    <string name="contacts">contacts</string>
+    <string name="gallery">gallery</string>
+    <string name="pdfs">PDFs</string>
+    <string name="home">home</string>
+    <string name="name">name</string>
+    <string name="open">open</string>
+    <string name="close">close</string>
 </resources>
