@@ -50,8 +50,8 @@ nav.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelecte
             case R.id.menu_gallery:
                 Toast.makeText(getApplicationContext(),"gallery opened",Toast.LENGTH_LONG).show();
                 drawerlayout.closeDrawer(GravityCompat.START);
-                Intent i=new Intent(home.this,gallery.class);
-                startActivity(i);
+                Intent i1=new Intent(home.this,gallery.class);
+                startActivity(i1);
                 break;
             case R.id.menu_pdf:
                 Toast.makeText(getApplicationContext(),"pdfs opened",Toast.LENGTH_LONG).show();
@@ -60,6 +60,8 @@ nav.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelecte
             case R.id.menu_contacts:
                 Toast.makeText(getApplicationContext(),"contacts opened",Toast.LENGTH_LONG).show();
                 drawerlayout.closeDrawer(GravityCompat.START);
+                Intent i2=new Intent(home.this,contacts.class);
+                startActivity(i2);
                 break;
 
         }

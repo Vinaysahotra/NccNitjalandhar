@@ -8,24 +8,26 @@
     tools:openDrawer="start"
     tools:context=".home"
     >
+
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-app:title="Home"
-        app:titleTextColor="#FFF"
 
-        android:gravity="center_horizontal"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#31CCDF"
+            android:gravity="center_horizontal"
+            app:title="Home"
+
+            app:titleTextColor="#FFF"
 
 
-        tools:ignore="HardcodedText" />
+            tools:ignore="HardcodedText" />
     </RelativeLayout>
 
-<com.google.android.material.navigation.NavigationView
+    <com.google.android.material.navigation.NavigationView
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
 android:id="@+id/navmenu"
