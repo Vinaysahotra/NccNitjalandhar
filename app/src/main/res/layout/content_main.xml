@@ -20,6 +20,7 @@
         android:layout_marginLeft="10dp"
         android:text="@string/name"
         android:textColor="#0C0909"
+        android:id="@+id/name"
 
         android:textSize="30sp" />
 </androidx.appcompat.widget.LinearLayoutCompat>

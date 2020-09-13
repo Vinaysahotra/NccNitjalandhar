@@ -53,7 +53,7 @@ ImageView imageView;
 
                 try {
                     outputStream= new FileOutputStream(outFile);
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 90, outputStream);
                     outputStream.flush();
                     outputStream.close();
                     Intent i = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);

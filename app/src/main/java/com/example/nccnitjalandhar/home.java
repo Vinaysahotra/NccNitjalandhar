@@ -17,6 +17,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class home extends AppCompatActivity {
@@ -29,6 +30,7 @@ DrawerLayout drawerlayout;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
         Toolbar toolbar = findViewById(R.id.toolbar);
+       TextView name=findViewById(R.id.name);
 
         setSupportActionBar(toolbar);
         nav= findViewById(R.id.navmenu);
@@ -56,6 +58,8 @@ nav.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelecte
             case R.id.menu_pdf:
                 Toast.makeText(getApplicationContext(),"pdfs opened",Toast.LENGTH_LONG).show();
                 drawerlayout.closeDrawer(GravityCompat.START);
+                Intent i3=new Intent(home.this,pdf.class);
+                startActivity(i3);
                 break;
             case R.id.menu_contacts:
                 Toast.makeText(getApplicationContext(),"contacts opened",Toast.LENGTH_LONG).show();

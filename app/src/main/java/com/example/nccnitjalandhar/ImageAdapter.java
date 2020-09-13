@@ -17,7 +17,7 @@ public class ImageAdapter extends BaseAdapter {
     }
     public int[]imagearray={R.drawable.ncc,R.drawable.ncc2,R.drawable.ncc3,R.drawable.download1,R.drawable.ncc4,
             R.drawable.ncc5,R.drawable.ncc6,R.drawable.ncc7,R.drawable.ncc8,R.drawable.ncc9,
-            R.drawable.ncc10,R.drawable.ncc11,R.drawable.ncc12,R.drawable.ncc13,R.drawable.ncc14,R.drawable.ncc16,R.drawable.ncc15,R.drawable.gu78,R.drawable.ncc20,R.drawable.ncc18};
+            R.drawable.ncc10,R.drawable.ncc11,R.drawable.ncc12,R.drawable.ncc13};
     @Override
     public int getCount() {
         return imagearray.length;
@@ -38,8 +38,9 @@ public class ImageAdapter extends BaseAdapter {
         ImageView imagev =new ImageView(mContext);
         imagev.setImageResource(imagearray[i]);
         imagev.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        imagev.setLayoutParams(new GridView.LayoutParams(250,250));
+        imagev.setLayoutParams(new GridView.LayoutParams(250,300));
 
         return imagev;
+
     }
 }

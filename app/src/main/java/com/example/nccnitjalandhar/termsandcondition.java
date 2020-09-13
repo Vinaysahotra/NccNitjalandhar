@@ -29,7 +29,7 @@ public class termsandcondition extends AppCompatActivity implements View.OnClick
             Manifest.permission.CALL_PHONE
     };
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -62,7 +62,7 @@ public class termsandcondition extends AppCompatActivity implements View.OnClick
 
 
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.continue1) {
