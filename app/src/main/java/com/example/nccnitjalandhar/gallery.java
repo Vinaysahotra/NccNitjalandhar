@@ -27,7 +27,6 @@ public class gallery extends AppCompatActivity  {
         Button next;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
-        getSupportActionBar().setTitle("GALLERY");
         gridView=(GridView)findViewById(R.id.grid_view);
         gridView.setAdapter(new ImageAdapter(this));
     gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

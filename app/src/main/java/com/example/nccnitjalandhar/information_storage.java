@@ -10,8 +10,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.Nullable;
 
 public class information_storage extends SQLiteOpenHelper {
-    public static final String DATABASE_NAME = "login_info.db";
-    public static final String TABLE_NAME = "login";
+    public static final String DATABASE_NAME = "login_info1.db";
+    public static final String TABLE_NAME = "LOGIN";
     public static final String COL_1 = "ID";
     public static final String COL_2 = "email";
     public static final String COL_3 = "username";
@@ -19,14 +19,14 @@ public class information_storage extends SQLiteOpenHelper {
 
 
     public information_storage(Context context) {
-        super(context,TABLE_NAME, null,2);
+        super(context,TABLE_NAME, null,1);
 
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-    db.execSQL("CREATE TABLE login  (ID INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, username TEXT, password TEXT)");
+    db.execSQL("CREATE TABLE LOGIN  (ID INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, username TEXT, password TEXT)");
 
 
     }
@@ -34,7 +34,7 @@ public class information_storage extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
 
-        db.execSQL("DROP TABLE IF EXISTS login");
+        db.execSQL("DROP TABLE IF EXISTS LOGIN");
         onCreate(db);
 
     }
@@ -57,6 +57,11 @@ else {
             return true;
         }
 
+    }
+    public  Cursor getdata(){
+        SQLiteDatabase db=this.getWritableDatabase();
+        Cursor res=db.rawQuery("select * from "+TABLE_NAME,null);
+        return res;
     }
 
 

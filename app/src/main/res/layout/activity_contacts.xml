@@ -5,5 +5,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".contacts">
+    <Toolbar
+        android:id="@+id/textView1"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+
+
+        android:layout_weight="1"
+        android:background="@color/colorPrimary"
+        android:gravity="center_horizontal"
+        android:title="contacts"
+        android:textAlignment="center"
+        android:titleTextColor="#FFF"
+        android:titleMarginStart="150dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

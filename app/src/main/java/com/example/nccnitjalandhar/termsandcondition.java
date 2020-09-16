@@ -30,6 +30,7 @@ public class termsandcondition extends AppCompatActivity implements View.OnClick
     };
 
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -66,8 +67,9 @@ public class termsandcondition extends AppCompatActivity implements View.OnClick
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.continue1) {
-          Intent i = new Intent(termsandcondition.this, gallery.class);
+          Intent i = new Intent(termsandcondition.this, MainActivity.class);
             startActivity(i);
+            finish();
             Toast.makeText(getApplicationContext(), "thanks", Toast.LENGTH_SHORT).show();
         }
     }

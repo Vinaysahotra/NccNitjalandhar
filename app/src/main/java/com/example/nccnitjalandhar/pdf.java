@@ -26,9 +26,9 @@ String []item;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pdf);
-        getSupportActionBar().setTitle("PDFs");
+
         recyclerview=findViewById(R.id.recylerv_view);
-        new ItemTouchHelper(itemtouchhelper).attachToRecyclerView(recyclerview);
+
         initImages();
     }
 
@@ -68,6 +68,8 @@ initrecyclerview();
     private void initrecyclerview(){
         RecyclerView r=findViewById(R.id.recylerv_view);
         recyclerview adapter=new recyclerview(this,mnames,item);
+        new ItemTouchHelper(itemtouchhelper).attachToRecyclerView(recyclerview);
+
         r.setAdapter(adapter);
         r.setLayoutManager(new LinearLayoutManager(this,RecyclerView.VERTICAL,false));
     }
@@ -81,7 +83,7 @@ initrecyclerview();
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
             mnames.remove(viewHolder.getAdapterPosition());
-            recyclerview.notify();
+            recyclerview.notifyAll();
         }
     };
 }

@@ -4,7 +4,23 @@
     android:layout_height="match_parent"
     android:id="@+id/parent_layout">
 
+    <TextView
+        android:id="@+id/pdftoolbar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+
+
+        android:layout_weight="1"
+        android:background="@color/colorPrimary"
+        android:gravity="center_horizontal"
+        android:text="PDFs"
+        android:textAlignment="center"
+        android:textColor="#FFF"
+        android:textSize="30dp" />
     <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginTop="50dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/recylerv_view" />

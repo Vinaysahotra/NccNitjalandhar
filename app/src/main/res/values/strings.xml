@@ -29,4 +29,5 @@
     <string name="name">name</string>
     <string name="open">open</string>
     <string name="close">close</string>
+    <string name="pref" />
 </resources>

@@ -53,7 +53,7 @@ ImageView imageView;
 
                 try {
                     outputStream= new FileOutputStream(outFile);
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 90, outputStream);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 80, outputStream);
                     outputStream.flush();
                     outputStream.close();
                     Intent i = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
@@ -74,7 +74,7 @@ ImageView imageView;
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.next) {
-            Intent i = new Intent(fullscreen.this, home.class);
+            Intent i = new Intent(fullscreen.this, MainActivity.class);
 
             startActivity(i);
         }
