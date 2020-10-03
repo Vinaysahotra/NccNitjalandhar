@@ -2,48 +2,62 @@ package com.example.nccnitjalandhar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
 
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
+
 import java.io.File;
 import java.util.ArrayList;
 
 import static android.os.Environment.*;
+import static com.example.nccnitjalandhar.recyclerview.*;
 
 public class pdf extends AppCompatActivity {
-private ArrayList<File>mnames=new ArrayList<>();
-RecyclerView recyclerview;
+public static ArrayList<File> mnames=new ArrayList<>();
+RecyclerView recyclerview1;
+recyclerview adapter;
 File folder;
 String []item;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pdf);
+        folder=new File(Environment.getExternalStorageDirectory().getAbsolutePath());
+        mnames=getPdfFiles(folder);
+        ArrayList<File>mypdf=getPdfFiles(Environment.getExternalStorageDirectory());
+        item=new String[mypdf.size()];
+        new ItemTouchHelper(itemtouchhelper).attachToRecyclerView(recyclerview1);
+        recyclerview1=findViewById(R.id.recylerv_view);
 
-        recyclerview=findViewById(R.id.recylerv_view);
+        for(int i=0;i<item.length;i++){
+            item[i]=mypdf.get(i).getName().replace(".pdf","");
+        }
+        adapter=new recyclerview(this,mnames,item);
+        adapter.notifyDataSetChanged();
 
-        initImages();
+
+
+
+        recyclerview1.setAdapter(adapter);
+        DividerItemDecoration dividerItemDecoration=new DividerItemDecoration(this,DividerItemDecoration.VERTICAL);
+        recyclerview1.addItemDecoration(dividerItemDecoration);
+        recyclerview1.setLayoutManager(new LinearLayoutManager(this,RecyclerView.VERTICAL,false));
+        ItemTouchHelper itemTouchHelper=new ItemTouchHelper(itemtouchhelper);
+        itemTouchHelper.attachToRecyclerView(recyclerview1);
+
+
     }
-
-    private void initImages(){
-folder=new File(Environment.getExternalStorageDirectory().getAbsolutePath());
-mnames=getPdfFiles(folder);
-ArrayList<File>mypdf=getPdfFiles(Environment.getExternalStorageDirectory());
-item=new String[mypdf.size()];
-for(int i=0;i<item.length;i++){
-    item[i]=mypdf.get(i).getName().replace(".pdf","");
-}
-initrecyclerview();
-
-    }
-
     private ArrayList<File> getPdfFiles(File folder) {
         ArrayList<File>array=new ArrayList<>();
         File[]files=folder.listFiles();
@@ -63,17 +77,7 @@ initrecyclerview();
         }
         return array;
     }
-
-
-    private void initrecyclerview(){
-        RecyclerView r=findViewById(R.id.recylerv_view);
-        recyclerview adapter=new recyclerview(this,mnames,item);
-        new ItemTouchHelper(itemtouchhelper).attachToRecyclerView(recyclerview);
-
-        r.setAdapter(adapter);
-        r.setLayoutManager(new LinearLayoutManager(this,RecyclerView.VERTICAL,false));
-    }
-    
+    File deleted=null;
     ItemTouchHelper.SimpleCallback itemtouchhelper=new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.RIGHT|ItemTouchHelper.LEFT) {
         @Override
         public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
@@ -82,8 +86,27 @@ initrecyclerview();
 
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-            mnames.remove(viewHolder.getAdapterPosition());
-            recyclerview.notifyAll();
+            final int position=viewHolder.getAdapterPosition();
+            switch (direction){
+                case ItemTouchHelper.LEFT:
+                    Intent i=new Intent(pdf.this,pdfview.class);
+                    startActivity(i);
+                case ItemTouchHelper.RIGHT:
+                    deleted=mnames.get(position);
+                    mnames.remove(position);
+                   adapter.notifyItemRemoved(position);
+                    Snackbar.make(recyclerview1, (CharSequence) deleted, Snackbar.LENGTH_LONG)
+                            .setAction("UNDO", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    mnames.add(position,deleted);
+                                    adapter.notifyItemInserted(position);
+                                }
+                            }).show();
+                    break;
+
+
+            }
         }
     };
 }
