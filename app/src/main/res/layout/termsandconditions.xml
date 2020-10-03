@@ -18,16 +18,16 @@
 
         android:paddingLeft="70dp"
 
-
         android:text="terms and conditions"
-        android:textAllCaps="true"
+     android:textAlignment="center"
         android:textColor="#5419F6"
 
 
-        android:textSize="30sp"
+        android:textSize="20sp"
         android:textStyle="bold"
         tools:layout_editor_absoluteX="41dp"
-        tools:layout_editor_absoluteY="420dp" />
+        tools:layout_editor_absoluteY="420dp"
+        tools:ignore="RtlCompat" />
 
     <TextView
         android:paddingRight="10dp"
@@ -35,13 +35,15 @@
         android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="127dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="30dp"
         android:text="@string/_1_i_promise_that_i_will_honestly_and_faithfully_serve_my_country_and_abide_by_the_rules_and_regulations_of_the_national_cadet_corps_that_i_will_do_not_best_of_my_ability_all_parades_and_camps_as_may_be_required_by_the_commanding_officer_from_time_to_time"
         android:textAllCaps="true"
         android:textColor="#000"
 
 
-        android:textSize="15sp" />
+        android:textSize="15sp"
+        android:paddingStart="5dp"
+        android:paddingEnd="10dp" />
 
     <TextView
         android:id="@+id/textView2"
@@ -49,7 +51,7 @@
         android:paddingRight="10dp"
         android:paddingLeft="5dp"
         android:layout_height="147dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="30dp"
 
         android:text="2. I further promise that after enrolment,     I will have
  to claim on authorities for any compensation in the event of injury or death due
@@ -65,7 +67,7 @@
         android:layout_width="246dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="60dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="50dp"
 
         android:text="@string/i_have_read_terms_and_conditions"
         android:textColor="#0226EF" />
@@ -74,7 +76,7 @@
         android:layout_width="150dp"
         android:layout_height="50dp"
 android:layout_marginLeft="100dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="60dp"
         app:cardBackgroundColor="@color/colorAccent"
 
             app:cardCornerRadius="15dp"

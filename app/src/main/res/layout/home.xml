@@ -9,6 +9,8 @@
     tools:context=".MainActivity"
     >
 
+
+
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
@@ -25,6 +27,20 @@
 
 
             tools:ignore="HardcodedText" />
+
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerview2"
+            android:layout_marginTop="60dp"
+            android:scrollbars="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+
+
+
     </RelativeLayout>
 
     <com.google.android.material.navigation.NavigationView

@@ -68,6 +68,7 @@ b=findViewById(R.id.login1);
                           if (val) {
                         Toast.makeText(getApplicationContext(), "login successfull", Toast.LENGTH_SHORT).show();
                         Intent i=new Intent(login.this,termsandcondition.class);
+
                         startActivity(i);
                         finish();
                     }

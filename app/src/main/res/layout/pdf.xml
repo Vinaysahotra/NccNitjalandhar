@@ -12,7 +12,6 @@
         android:layout_alignParentRight="true"
 
 
-        android:layout_weight="1"
         android:background="@color/colorPrimary"
         android:gravity="center_horizontal"
         android:text="PDFs"

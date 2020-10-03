@@ -27,7 +27,7 @@ ImageView imageView;
         setContentView(R.layout.activity_fullscreen);
         imageView=(ImageView)findViewById(R.id.full);
 
-        getSupportActionBar().setTitle("full image");
+
         Log.d( "myapp","hello");
         Intent i=getIntent();
         int position=i.getExtras().getInt("l");
