@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "117049341508",
+    "firebase_url": "https://ncc-nitjalandhar.firebaseio.com",
+    "project_id": "ncc-nitjalandhar",
+    "storage_bucket": "ncc-nitjalandhar.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:117049341508:android:404c5cfd3bcfce17746e11",
+        "android_client_info": {
+          "package_name": "com.example.nccnitjalandhar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "117049341508-8lmlbchs1c75g0lfqh1l59vop5bq1l19.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAMQ1BzRSrjdZBntOyunv22KgYGJLb7uvE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "117049341508-8lmlbchs1c75g0lfqh1l59vop5bq1l19.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
