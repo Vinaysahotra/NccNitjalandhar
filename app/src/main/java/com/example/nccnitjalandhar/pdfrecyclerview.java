@@ -2,26 +2,20 @@ package com.example.nccnitjalandhar;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.File;
-import java.nio.file.Files;
 import java.util.ArrayList;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-
-public class recyclerview extends RecyclerView.Adapter<recyclerview.ViewHolder>{
+public class pdfrecyclerview extends RecyclerView.Adapter<pdfrecyclerview.ViewHolder>{
     private  final String TAG = "recyclerview";
 
     private ArrayList<File> mImagesname=new ArrayList<>();
@@ -29,7 +23,7 @@ public class recyclerview extends RecyclerView.Adapter<recyclerview.ViewHolder>{
   public   String items[];
 
 
-    public recyclerview(Context mcontext, ArrayList<File> mImagesname, String mitms[]) {
+    public pdfrecyclerview(Context mcontext, ArrayList<File> mImagesname, String mitms[]) {
 
         this.mImagesname = mImagesname;
 

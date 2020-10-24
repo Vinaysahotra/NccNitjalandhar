@@ -16,8 +16,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,12 +35,28 @@ import android.widget.Toast;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.basgeekball.awesomevalidation.utility.RegexTemplate;
+import com.bumptech.glide.Glide;
 import com.example.nccnitjalandhar.api.ApiInterface;
 import com.example.nccnitjalandhar.api.Apiclient;
 import com.example.nccnitjalandhar.models.Article;
 import com.example.nccnitjalandhar.models.News;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +64,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
     NavigationView nav;
     ActionBarDrawerToggle toggle;
     DrawerLayout drawerlayout;
@@ -52,27 +73,89 @@ public class MainActivity extends AppCompatActivity{
     private RecyclerView.LayoutManager layoutManager;
     private List<Article> articles=new ArrayList<>();
     private newsAdapter adapter;
-    private ImageView imageView;
+    private StorageReference mstorage;
+    ImageView imageView;
+    private  static int GALLERY_REQUEST=123;
+    String name;
+    String email;
+    TextView usermail;
+    TextView username;
+    FirebaseFirestore fsotore;
+    FirebaseAuth mauth;
+    FirebaseUser currentuser;
+    String userId;
 private static final int PICK_IMAGE=1;
+    private int id;
 
     @Override
 protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.home);
-    Toolbar toolbar = findViewById(R.id.toolbar);
-    TextView name=findViewById(R.id.name);
-    imageView=findViewById(R.id.profile_photo);
 
-    setSupportActionBar(toolbar);
-    nav= findViewById(R.id.navmenu);
-    drawerlayout =findViewById(R.id.drawer);
+        nav= findViewById(R.id.navmenu);
+        drawerlayout =findViewById(R.id.drawer);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-    toggle=new ActionBarDrawerToggle(this,drawerlayout,toolbar,R.string.open,R.string.close);
-    drawerlayout.addDrawerListener(toggle);
-    toggle.syncState();
+
+        toggle=new ActionBarDrawerToggle(this,drawerlayout,toolbar,R.string.open,R.string.close);
+        drawerlayout.addDrawerListener(toggle);
+        toggle.syncState();
+
+mauth=FirebaseAuth.getInstance();
+fsotore=FirebaseFirestore.getInstance();
+currentuser=mauth.getCurrentUser();
+        mstorage = FirebaseStorage.getInstance().getReference();
+userId= mauth.getCurrentUser().getUid();
+
+StorageReference profilepic=mstorage.child("users/"+mauth.getCurrentUser().getUid()+"/images");
+if(profilepic!=null) {
+    profilepic.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+        @Override
+        public void onSuccess(Uri uri) {
+            Glide.with(MainActivity.this).load(uri).into(imageView);
+        }
+
+    });
+}
+        DocumentReference documentReference=fsotore.collection("users").document(userId);
+        documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+
+                if(value.exists())
+                {
+                    View headerview=nav.getHeaderView(0);
+                    TextView navusername=headerview.findViewById(R.id.name);
+                    TextView emailuser=headerview.findViewById(R.id.usermail);
+                     imageView=headerview.findViewById(R.id.profile_photo);
+                    imageView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(Intent.ACTION_PICK,
+                                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                            intent.setType("image/*");
+                            intent.setAction(Intent.ACTION_GET_CONTENT);
+                            intent.putExtra("crop", "true");
+                            intent.putExtra("scale", true);
+                            intent.putExtra("outputX", 256);
+                            intent.putExtra("outputY", 256);
+                            intent.putExtra("aspectX", 1);
+                            intent.putExtra("aspectY", 1);
+                            intent.putExtra("return-data", true);
+                            startActivityForResult( Intent.createChooser(intent,"pick an image"),GALLERY_REQUEST);
+
+                        }
+                    });
+                    navusername.setText(value.getString("fname"));
+                    emailuser.setText(value.getString("email"));
+                }
+            }
+        });
 
 
     nav.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
@@ -80,7 +163,7 @@ protected void onCreate(Bundle savedInstanceState) {
 
                 case R.id.menu_home:
                     Toast.makeText(getApplicationContext(),"loading news",Toast.LENGTH_LONG).show();
-
+                    drawerlayout.closeDrawer(GravityCompat.START);
                     break;
                 case R.id.menu_gallery:
                     Toast.makeText(getApplicationContext(),"gallery opened",Toast.LENGTH_LONG).show();
@@ -99,6 +182,12 @@ protected void onCreate(Bundle savedInstanceState) {
                     drawerlayout.closeDrawer(GravityCompat.START);
                     Intent i2=new Intent(MainActivity.this,contacts.class);
                     startActivity(i2);
+                    break;
+                case R.id.logout:
+                    drawerlayout.closeDrawer(GravityCompat.START);
+                    Intent i4=new Intent(MainActivity.this,login.class);
+                    startActivity(i4);
+                    finish();
                     break;
 
             }
@@ -119,6 +208,43 @@ protected void onCreate(Bundle savedInstanceState) {
 
 }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != RESULT_OK) {
+            Toast.makeText(MainActivity.this, "photo not chosen", Toast.LENGTH_LONG).show();
+
+            return;
+        }
+        if (requestCode == GALLERY_REQUEST&& resultCode==RESULT_OK&&data!=null) {
+            final Uri imagedata=data.getData();
+
+
+            final StorageReference fileRef = mstorage.child("users/"+mauth.getCurrentUser().getUid()+"/images");
+
+            fileRef.putFile(imagedata)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+    @Override
+    public void onSuccess(Uri uri) {
+Glide.with(MainActivity.this).load(uri).into(imageView);
+    }
+});
+
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                           Toast.makeText(MainActivity.this,"error",Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+            }
+        }
 
 
     public void loadJdson(){

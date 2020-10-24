@@ -7,26 +7,21 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
+import android.widget.TextView;
 
-import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
 import java.util.ArrayList;
 
-import static android.os.Environment.*;
-import static com.example.nccnitjalandhar.recyclerview.*;
-
 public class pdf extends AppCompatActivity {
 public static ArrayList<File> mnames=new ArrayList<>();
 RecyclerView recyclerview1;
-recyclerview adapter;
+pdfrecyclerview adapter;
 File folder;
 String []item;
     @Override
@@ -43,7 +38,7 @@ String []item;
         for(int i=0;i<item.length;i++){
             item[i]=mypdf.get(i).getName().replace(".pdf","");
         }
-        adapter=new recyclerview(this,mnames,item);
+        adapter=new pdfrecyclerview(this,mnames,item);
         adapter.notifyDataSetChanged();
 
 

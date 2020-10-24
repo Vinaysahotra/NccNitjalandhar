@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:layout_height="match_parent"
-    tools:context=".termsandcondition">
+    >
 
     <TextView
         android:id="@+id/textView2"
@@ -15,15 +15,12 @@
         android:background="@color/colorAccent"
 
 
-
-        android:paddingLeft="70dp"
-
         android:text="terms and conditions"
      android:textAlignment="center"
         android:textColor="#5419F6"
 
 
-        android:textSize="20sp"
+        android:textSize="30sp"
         android:textStyle="bold"
         tools:layout_editor_absoluteX="41dp"
         tools:layout_editor_absoluteY="420dp"
@@ -33,10 +30,10 @@
         android:paddingRight="10dp"
         android:paddingLeft="5dp"
         android:id="@+id/textView"
-        android:layout_width="match_parent"
-        android:layout_height="127dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:text="@string/_1_i_promise_that_i_will_honestly_and_faithfully_serve_my_country_and_abide_by_the_rules_and_regulations_of_the_national_cadet_corps_that_i_will_do_not_best_of_my_ability_all_parades_and_camps_as_may_be_required_by_the_commanding_officer_from_time_to_time"
+        android:text="These Terms and Conditions constitute a legally binding agreement made between you, whether personally or on behalf of an entity  and Nitj ncc, concerning your access to and use of our mobile application . You agree that by accessing the Application, you have read, understood, and agree to be bound by all of these Terms and Conditions Use. IF YOU DO NOT AGREE WITH ALL OF THESE TERMS AND CONDITIONS, THEN YOU ARE EXPRESSLY PROHIBITED FROM USING THE APPLICATION AND YOU MUST DISCONTINUE USE IMMEDIATELY."
         android:textAllCaps="true"
         android:textColor="#000"
 
@@ -69,7 +66,7 @@
         android:layout_marginLeft="60dp"
         android:layout_marginTop="50dp"
 
-        android:text="@string/i_have_read_terms_and_conditions"
+        android:text="I, agree to terms and conditions"
         android:textColor="#0226EF" />
 
     <androidx.cardview.widget.CardView

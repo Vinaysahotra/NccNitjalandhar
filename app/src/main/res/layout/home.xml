@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:id="@+id/drawer"
     tools:openDrawer="start"
-    tools:context=".MainActivity"
     >
 
 
@@ -50,6 +49,7 @@ android:id="@+id/navmenu"
     app:menu="@menu/activity_main_drawer"
     app:headerLayout="@layout/content_main"
     android:layout_gravity="start"/>
+
 
 
 </androidx.drawerlayout.widget.DrawerLayout>

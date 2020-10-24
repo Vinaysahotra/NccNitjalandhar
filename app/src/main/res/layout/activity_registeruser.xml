@@ -9,14 +9,13 @@
     <TextView
         android:id="@+id/register"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
+        android:layout_height="25dp"
         android:gravity="center_horizontal"
-        android:text="LOGIN"
+        android:text="REGISTRATION"
         android:textAlignment="center"
         android:textColor="#EAE8E8"
-        android:textSize="30dp"
+        android:textSize="20dp"
         android:textStyle="bold"
-
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -44,82 +43,74 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/register">
+        app:layout_constraintTop_toBottomOf="@+id/imageView2">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-
-
             <EditText
-                android:id="@+id/editTextTextEmailAddress"
+                android:id="@+id/username"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginLeft="15dp"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginRight="15dp"
+
+                android:hint="Username" />
+
+            <EditText
+                android:id="@+id/email"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="30dp"
                 android:layout_marginRight="15dp"
 
                 android:hint="email address" />
 
             <EditText
-                android:id="@+id/password"
+                android:id="@+id/setpassword"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginLeft="15dp"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="30dp"
                 android:layout_marginRight="15dp"
-                android:ems="10"
-                android:inputType="textPassword"
-                android:hint="password" />
+
+                android:hint="set password" />
 
             <Button
-                android:id="@+id/login1"
+                android:id="@+id/signin"
                 android:layout_width="100dp"
                 android:layout_height="50dp"
-                android:layout_marginStart="80dp"
+                android:layout_marginStart="85dp"
                 android:layout_marginLeft="80dp"
-                android:layout_marginTop="40dp"
-                android:background="#36CCDF"
-                android:text="login" />
+                android:layout_marginTop="30dp"
+                android:background="#40B9EF"
+                android:text="sign in" />
 
             <TextView
-                android:id="@+id/register1"
+                android:id="@+id/alreadyuser"
                 android:layout_width="wrap_content"
-                android:layout_height="25dp"
-                android:layout_marginLeft="40dp"
-                android:clickable="true"
-                android:layout_marginTop="15dp"
-                android:text="new user? sign in here"
-                android:textColor="#3B3BF8"
-                android:textSize="20dp" />
-            <TextView
-                android:id="@+id/forgot_password"
-                android:layout_width="wrap_content"
-                android:layout_height="25dp"
+                android:layout_height="20dp"
+                android:layout_marginLeft="60dp"
                 android:layout_marginTop="10dp"
-                android:clickable="true"
-                android:layout_marginLeft="40dp"
-                android:text="forgot password?"
+                android:text="already user? login now"
                 android:textColor="#3B3BF8"
-                android:textSize="20dp"
-                android:layout_marginStart="50dp" />
+                android:textSize="15dp" />
 
             <ProgressBar
-                android:id="@+id/progressBar2"
+                android:id="@+id/progressBar1"
+                android:visibility="invisible"
                 style="?android:attr/progressBarStyle"
                 android:layout_width="91dp"
-                android:layout_height="40dp"
-                android:layout_marginLeft="80dp"
-                android:layout_marginTop="5dp"
-                android:visibility="invisible" />
-
+                android:layout_height="49dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="85dp" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
