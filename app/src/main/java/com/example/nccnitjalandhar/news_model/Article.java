@@ -1,4 +1,4 @@
-package com.example.nccnitjalandhar.models;
+package com.example.nccnitjalandhar.news_model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
