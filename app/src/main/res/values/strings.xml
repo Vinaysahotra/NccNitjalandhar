@@ -31,4 +31,6 @@
     <string name="close">close</string>
     <string name="pref" />
     <string name="news">news</string>
+    <string name="cadets">cadets</string>
+    <string name="refresh">refresh</string>
 </resources>

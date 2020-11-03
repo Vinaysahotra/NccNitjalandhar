@@ -7,14 +7,14 @@
     android:background="@drawable/gradient_5">
 
     <TextView
-        android:id="@+id/register"
+        android:id="@+id/login"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:gravity="center_horizontal"
         android:text="LOGIN"
         android:textAlignment="center"
         android:textColor="#EAE8E8"
-        android:textSize="30dp"
+        android:textSize="25dp"
         android:textStyle="bold"
 
         app:layout_constraintBottom_toBottomOf="parent"
@@ -44,13 +44,12 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/register">
+        app:layout_constraintTop_toBottomOf="@+id/login">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-
 
 
             <EditText
@@ -71,8 +70,8 @@
                 android:layout_marginTop="50dp"
                 android:layout_marginRight="15dp"
                 android:ems="10"
-                android:inputType="textPassword"
-                android:hint="password" />
+                android:hint="password"
+                android:inputType="textPassword" />
 
             <Button
                 android:id="@+id/login1"
@@ -89,22 +88,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="25dp"
                 android:layout_marginLeft="40dp"
-                android:clickable="true"
                 android:layout_marginTop="15dp"
+                android:clickable="true"
                 android:text="new user? sign in here"
                 android:textColor="#3B3BF8"
                 android:textSize="20dp" />
+
             <TextView
                 android:id="@+id/forgot_password"
                 android:layout_width="wrap_content"
                 android:layout_height="25dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginStart="55dp"
+                android:layout_marginLeft="48dp"
+                android:layout_marginTop="15dp"
                 android:clickable="true"
-                android:layout_marginLeft="40dp"
                 android:text="forgot password?"
                 android:textColor="#3B3BF8"
-                android:textSize="20dp"
-                android:layout_marginStart="50dp" />
+                android:textSize="20dp" />
 
             <ProgressBar
                 android:id="@+id/progressBar2"

@@ -5,46 +5,40 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.util.Pair;
 import androidx.core.view.GravityCompat;
+import androidx.core.view.ViewCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.content.ContentValues;
-import android.content.Context;
+import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.provider.MediaStore;
-import android.util.Log;
-import android.util.Patterns;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.basgeekball.awesomevalidation.AwesomeValidation;
-import com.basgeekball.awesomevalidation.ValidationStyle;
-import com.basgeekball.awesomevalidation.utility.RegexTemplate;
 import com.bumptech.glide.Glide;
 import com.example.nccnitjalandhar.api.ApiInterface;
 import com.example.nccnitjalandhar.api.Apiclient;
-import com.example.nccnitjalandhar.models.Article;
-import com.example.nccnitjalandhar.models.News;
+import com.example.nccnitjalandhar.news_model.Article;
+import com.example.nccnitjalandhar.news_model.News;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -54,11 +48,10 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -73,20 +66,24 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager layoutManager;
     private List<Article> articles=new ArrayList<>();
     private newsAdapter adapter;
+    DatabaseReference reference;
     private StorageReference mstorage;
     ImageView imageView;
     private  static int GALLERY_REQUEST=123;
     String name;
     String email;
-    TextView usermail;
-    TextView username;
+    TextView navusername;
+    ProgressBar profilepicload;
+    TextView emailuser;
     FirebaseFirestore fsotore;
     FirebaseAuth mauth;
     FirebaseUser currentuser;
     String userId;
+    private SwipeRefreshLayout swipeRefreshLayout;
 private static final int PICK_IMAGE=1;
     private int id;
 
+    @SuppressLint("ResourceAsColor")
     @Override
 protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -108,45 +105,46 @@ currentuser=mauth.getCurrentUser();
         mstorage = FirebaseStorage.getInstance().getReference();
 userId= mauth.getCurrentUser().getUid();
 
-StorageReference profilepic=mstorage.child("users/"+mauth.getCurrentUser().getUid()+"/images");
-if(profilepic!=null) {
-    profilepic.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-        @Override
-        public void onSuccess(Uri uri) {
-            Glide.with(MainActivity.this).load(uri).into(imageView);
-        }
+ StorageReference profilepic=mstorage.child("users/"+mauth.getCurrentUser().getUid()+"/images");
+        profilepic.child("users/" + mauth.getCurrentUser().getUid() + "/images");
+        profilepic.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                if(uri!=null) {
+                    Glide.with(MainActivity.this).load(uri).into(imageView);
 
-    });
-}
+
+                }
+            }
+
+
+        });
+        View headerview=nav.getHeaderView(0);
+         navusername=headerview.findViewById(R.id.name);
+         emailuser = headerview.findViewById(R.id.usermail);
+        imageView=headerview.findViewById(R.id.profile_photo);
+        profilepicload=headerview.findViewById(R.id.loadingphoto);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_PICK,
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult( Intent.createChooser(intent,"pick an image"),GALLERY_REQUEST);
+
+            }
+        });
+
         DocumentReference documentReference=fsotore.collection("users").document(userId);
+        if(mauth.getCurrentUser()!=null)
         documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
 
                 if(value.exists())
                 {
-                    View headerview=nav.getHeaderView(0);
-                    TextView navusername=headerview.findViewById(R.id.name);
-                    TextView emailuser=headerview.findViewById(R.id.usermail);
-                     imageView=headerview.findViewById(R.id.profile_photo);
-                    imageView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Intent intent = new Intent(Intent.ACTION_PICK,
-                                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                            intent.setType("image/*");
-                            intent.setAction(Intent.ACTION_GET_CONTENT);
-                            intent.putExtra("crop", "true");
-                            intent.putExtra("scale", true);
-                            intent.putExtra("outputX", 256);
-                            intent.putExtra("outputY", 256);
-                            intent.putExtra("aspectX", 1);
-                            intent.putExtra("aspectY", 1);
-                            intent.putExtra("return-data", true);
-                            startActivityForResult( Intent.createChooser(intent,"pick an image"),GALLERY_REQUEST);
 
-                        }
-                    });
                     navusername.setText(value.getString("fname"));
                     emailuser.setText(value.getString("email"));
                 }
@@ -162,8 +160,11 @@ if(profilepic!=null) {
             switch (item.getItemId()){
 
                 case R.id.menu_home:
-                    Toast.makeText(getApplicationContext(),"loading news",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),"refreshing news",Toast.LENGTH_LONG).show();
+
                     drawerlayout.closeDrawer(GravityCompat.START);
+
+
                     break;
                 case R.id.menu_gallery:
                     Toast.makeText(getApplicationContext(),"gallery opened",Toast.LENGTH_LONG).show();
@@ -185,9 +186,10 @@ if(profilepic!=null) {
                     break;
                 case R.id.logout:
                     drawerlayout.closeDrawer(GravityCompat.START);
-                    Intent i4=new Intent(MainActivity.this,login.class);
+                    mauth.signOut();
+                    Intent i4=new Intent(MainActivity.this,login.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(i4);
-                    finish();
+                       finish();
                     break;
 
             }
@@ -203,7 +205,7 @@ if(profilepic!=null) {
         recyclerView.setNestedScrollingEnabled(false);
         adapter=new newsAdapter(articles,this);
         recyclerView.setAdapter(adapter);
-        loadJdson();
+      loadJdson();
 
 
 }
@@ -217,7 +219,10 @@ if(profilepic!=null) {
             return;
         }
         if (requestCode == GALLERY_REQUEST&& resultCode==RESULT_OK&&data!=null) {
+profilepicload.setVisibility(View.VISIBLE);
             final Uri imagedata=data.getData();
+
+
 
 
             final StorageReference fileRef = mstorage.child("users/"+mauth.getCurrentUser().getUid()+"/images");
@@ -231,6 +236,12 @@ fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
     @Override
     public void onSuccess(Uri uri) {
 Glide.with(MainActivity.this).load(uri).into(imageView);
+        Map<String,Object>map=new HashMap<>();
+        map.put("email",emailuser.getText().toString());
+        map.put("profilepic",uri.toString());
+        map.put("username",navusername.getText().toString());
+        FirebaseDatabase.getInstance().getReference().child("users").child(userId).updateChildren(map);
+profilepicload.setVisibility(View.GONE);
     }
 });
 
@@ -266,6 +277,7 @@ Glide.with(MainActivity.this).load(uri).into(imageView);
                 adapter=new newsAdapter(articles,MainActivity.this);
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
+
                 initListener();
 
             }
@@ -284,8 +296,10 @@ Glide.with(MainActivity.this).load(uri).into(imageView);
 }
 private void initListener(){
         adapter.setOnItemClickListener(new newsAdapter.OnItemClickListener() {
+
             @Override
             public void onItemClick(View view, int position) {
+
                 Intent i=new Intent(MainActivity.this,news.class);
               Article article=articles.get(position);
                 i.putExtra("url",article.getUrl());
@@ -294,11 +308,37 @@ private void initListener(){
                 i.putExtra("date",article.getPublishedAt());
                 i.putExtra("image",article.getUrlToImage());
                 i.putExtra("source",article.getSource().getName());
+
+
                 startActivity(i);
 
 
             }
         });
 }
+    private void status(String status){
+        reference=FirebaseDatabase.getInstance().getReference("users").child(currentuser.getUid());
+        HashMap<String,Object>map=new HashMap<>();
+        map.put("status",status);
+        reference.updateChildren(map);
 
     }
+
+    @Override
+    protected void onResume() {
+
+        super.onResume();
+        status("online");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        status("offline");
+    }
+
+
+
+
+
+}

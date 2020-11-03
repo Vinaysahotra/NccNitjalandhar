@@ -11,6 +11,7 @@ import android.widget.Button;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class splash extends AppCompatActivity {
     FirebaseUser currentuser;
@@ -31,14 +32,14 @@ handler.postDelayed(new Runnable() {
             startActivity(intent);
             finish();
         } else {
-            if(FirebaseAuth.getInstance().getCurrentUser()==null) {
+            if(FirebaseAuth.getInstance().getCurrentUser()==null||  currentuser==null) {
                 Intent intent = new Intent(splash.this, login.class);
                 startActivity(intent);
                 finish();
             }
         }
     }
-},4000);
+},3000);
 
 
     }

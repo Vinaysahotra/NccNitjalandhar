@@ -7,8 +7,8 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/menu_home"
-            android:icon="@drawable/ic_baseline_home_24"
-            android:title="@string/news" />
+            android:icon="@drawable/ic_baseline_refresh_24"
+            android:title="@string/refresh" />
         <item
             android:id="@+id/menu_pdf"
             android:icon="@drawable/ic_baseline_picture_as_pdf_24"
@@ -20,7 +20,7 @@
         <item
             android:id="@+id/menu_contacts"
             android:icon="@drawable/ic_baseline_contacts_24"
-            android:title="@string/contacts" />
+            android:title="@string/cadets" />
         <item
             android:id="@+id/logout"
             android:icon="@drawable/logouticon"

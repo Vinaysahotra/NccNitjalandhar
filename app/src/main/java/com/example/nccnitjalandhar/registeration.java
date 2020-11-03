@@ -25,6 +25,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -40,6 +42,8 @@ public class registeration extends AppCompatActivity {
     FirebaseFirestore fstore;
    private EditText setpassword;
    ProgressBar progressBar;
+   FirebaseDatabase root;
+   DatabaseReference data;
     FirebaseAuth mAuth;
      String userID;
     @Override
@@ -79,6 +83,7 @@ sign_in.setOnClickListener(new View.OnClickListener() {
     }
 
     private void registeruser(final String textemail, String textpassword, final String username1) {
+
         mAuth.createUserWithEmailAndPassword(textemail, textpassword)
                 .addOnCompleteListener(registeration.this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -88,6 +93,10 @@ sign_in.setOnClickListener(new View.OnClickListener() {
                             Toast.makeText(registeration.this, "signed in",Toast.LENGTH_SHORT).show();
 
                             userID=mAuth.getCurrentUser().getUid();
+
+                            data= FirebaseDatabase.getInstance().getReference("users").child(userID);
+                            userinfo classuser=new userinfo(textemail,username1,"default",userID,"offline");
+                            data.setValue(classuser);
                             DocumentReference documentReference=fstore.collection("users").document(userID);
                             Map<String,Object>user=new HashMap<>();
                             user.put("fname",username1);

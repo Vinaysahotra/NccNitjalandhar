@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#D8AA9B"
+   >
+    <android.widget.Toolbar
+        android:id="@+id/toolbar2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:gravity="center_horizontal"
+        android:textAlignment="center"
+
+        tools:targetApi="m" >
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="40dp"
+            android:id="@+id/toolbarimage"
+            android:layout_marginLeft="5dp"
+            android:src="@drawable/profilepic"
+            android:layout_height="40dp"
+            android:layout_marginStart="5dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="name"
+        android:textStyle="italic"
+        android:textSize="30sp"
+        android:layout_marginLeft="50dp"
+        android:id="@+id/toolbarname"
+        android:textColor="#FFF"
+        />
+    </android.widget.Toolbar>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/chatsrecycle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical"
+        android:layout_below="@+id/toolbar2"
+        android:layout_above="@+id/messageview"
+ />
+
+
+    <RelativeLayout
+        android:padding="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/messageview"
+        android:layout_alignParentBottom="true"
+        android:background="#C2F1E2"
+      >
+
+        <EditText
+
+            android:id="@+id/message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="type a message"
+            android:layout_toLeftOf="@+id/send"
+             />
+
+        <ImageButton
+            android:id="@+id/send"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_margin="1dp"
+            app:srcCompat="@drawable/forwardmessage" />
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

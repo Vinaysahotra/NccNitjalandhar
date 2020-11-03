@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:padding="8dp"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+        android:id="@+id/showmessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_left"
+        android:padding="5dp"
+        android:text="showmessage"
+        android:textColor="#FFF"
+        android:textSize="20sp"
+/>
+
+    <TextView
+        android:id="@+id/txt_seen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+android:visibility="gone"
+        android:layout_below="@+id/showmessage"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+
+        android:text="seen" />
+
+    </RelativeLayout>

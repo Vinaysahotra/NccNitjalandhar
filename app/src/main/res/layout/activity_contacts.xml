@@ -16,11 +16,18 @@
         android:layout_weight="1"
         android:background="@color/colorPrimary"
         android:gravity="center_horizontal"
-        android:title="contacts"
+        android:title="cadets"
         android:textAlignment="center"
         android:titleTextColor="#FFF"
         android:titleMarginStart="150dp"
         tools:ignore="MissingConstraints"
         tools:targetApi="m" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginTop="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/recylerv_view_contact" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
