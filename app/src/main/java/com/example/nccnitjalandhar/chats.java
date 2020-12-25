@@ -17,6 +17,7 @@ import android.widget.Toast;
 import android.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
+import com.example.nccnitjalandhar.adapters.messageAdapter;
 import com.example.nccnitjalandhar.messages.allmessages;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -25,6 +26,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessagingService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,6 +45,8 @@ RecyclerView chats;
 messageAdapter msgAdapter;
 List<allmessages>mchat;
 EditText messagesent;
+TextView onlinestatus;
+
 DatabaseReference reference;
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -50,6 +54,8 @@ DatabaseReference reference;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chats);
         Toolbar toolbar=findViewById(R.id.toolbar2);
+        onlinestatus=findViewById(R.id.online_status);
+
         setActionBar(toolbar);
         getActionBar().setTitle("");
         getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -99,6 +105,13 @@ reference.addValueEventListener(new ValueEventListener() {
         assert user != null;
         username.setText(user.getUsername());
 
+
+        if(user.getStatus().equals("online")){
+            onlinestatus.setText("online");
+        }
+        else{
+            onlinestatus.setText("offline");
+        }
        if(!user.getProfilepic().equals("default")){
            Glide.with(getApplicationContext()).load(user.getProfilepic()).into(profilephoto);
        }
@@ -149,6 +162,9 @@ if(message.getReciever().equals(fuser.getUid())&& message.getSender().equals(use
     private  void readMessages(final String  myId, final String userId, final String username){
         mchat=new ArrayList<>();
         reference=FirebaseDatabase.getInstance().getReference("chats");
+        DatabaseReference ref2= FirebaseDatabase.getInstance().getReference("users").child(userId);
+
+
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -187,6 +203,7 @@ if(message.getReciever().equals(fuser.getUid())&& message.getSender().equals(use
 
         super.onResume();
         status("online");
+
     }
 
     @Override

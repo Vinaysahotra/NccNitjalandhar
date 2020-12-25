@@ -1,9 +1,7 @@
 package com.example.nccnitjalandhar;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,25 +12,13 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.nccnitjalandhar.api.ApiInterface;
-import com.example.nccnitjalandhar.api.Apiclient;
-import com.example.nccnitjalandhar.models.Article;
-import com.example.nccnitjalandhar.models.News;
+import com.example.nccnitjalandhar.api.utils;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class news extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener{
 private ImageView imageView;
@@ -48,6 +34,10 @@ private String murl,mimg,mtitle,mdate,msource,mauthor;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.news);
+        toolbar=findViewById(R.id.toolbar);
+
+
+
 final CollapsingToolbarLayout collapsingToolbarLayout=findViewById(R.id.collapsing_toolbar);
 collapsingToolbarLayout.setTitle("");
 appBarLayout=findViewById(R.id.appbar);
@@ -55,6 +45,7 @@ appBarLayout=findViewById(R.id.appbar);
         appbar_subtitle=findViewById(R.id.subtitle_on_appbar);
 appBarLayout.addOnOffsetChangedListener(this);
 date_behaviour=findViewById(R.id.date_behavior);
+date_behaviour.setVisibility(View.GONE);
         imageView=findViewById(R.id.backdrop);
 titleappbar=findViewById(R.id.title_appbar);
 title=findViewById(R.id.title);
@@ -83,12 +74,8 @@ time=findViewById(R.id.time);
 appbar_subtitle.setText(murl);
 
         String author=null;
-if(mauthor !=null|| mauthor !=""){
-    mauthor="\u2022"+mauthor;
-}else {
-    author="";
-}
-time.setText(msource+author+"\u2022"+utils.DateToTimeFormat(mdate));
+        mauthor="\u2022"+mauthor;
+        time.setText(msource+author+"\u2022"+utils.DateToTimeFormat(mdate));
 initWebview(murl);
     }
     private void initWebview(String url){
@@ -116,22 +103,22 @@ initWebview(murl);
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
-        return super.onSupportNavigateUp();
+        return true;
     }
 
 
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
 int maxScroll=appBarLayout.getTotalScrollRange();
-float percentage=(float)Math.abs(verticalOffset)/(float)maxScroll;
-if(percentage==1f&&isHideToolbar){
+float percentage=(float)Math.abs(verticalOffset) / (float)maxScroll;
+if(percentage==1f && isHideToolbar){
     date_behaviour.setVisibility(View.GONE);
     titleappbar.setVisibility(View.VISIBLE);
-    isHideToolbar=isHideToolbar;
-}else if(percentage<1f&&isHideToolbar){
-    date_behaviour.setVisibility(View.VISIBLE);
+    isHideToolbar=!isHideToolbar;
+}else if(percentage<1f && isHideToolbar){
+    date_behaviour.setVisibility(View.GONE);
     titleappbar.setVisibility(View.GONE);
-    isHideToolbar=isHideToolbar;
+    isHideToolbar=!isHideToolbar;
 }
     }
 }

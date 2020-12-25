@@ -1,7 +1,5 @@
 package com.example.nccnitjalandhar;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -14,6 +12,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -25,16 +24,17 @@ ImageView imageView;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fullscreen);
-        imageView=(ImageView)findViewById(R.id.full);
+        imageView= findViewById(R.id.full);
 
 
         Log.d( "myapp","hello");
         Intent i=getIntent();
         int position=i.getExtras().getInt("l");
-        ImageAdapter imageAdapter=new ImageAdapter(this);
+
+        com.example.nccnitjalandhar.ImageAdapter imageAdapter=new com.example.nccnitjalandhar.ImageAdapter(this);
         imageView.setImageResource(imageAdapter.imagearray[position]);
-        Button  next=(Button)findViewById(R.id.next);
-        Button  save=(Button)findViewById(R.id.saveimage);
+        Button  next= findViewById(R.id.next);
+        Button  save= findViewById(R.id.saveimage);
         save.setOnClickListener(new View.OnClickListener() {
 
             @Override

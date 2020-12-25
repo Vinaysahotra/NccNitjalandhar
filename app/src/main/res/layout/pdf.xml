@@ -12,12 +12,13 @@
         android:layout_alignParentRight="true"
 
 
-        android:background="@color/colorPrimary"
+        android:background="@color/colorAccent"
         android:gravity="center_horizontal"
         android:text="PDFs"
         android:textAlignment="center"
-        android:textColor="#FFF"
-        android:textSize="30dp" />
+        android:textStyle="bold"
+        android:textColor="#100D0D"
+        android:textSize="30sp" />
     <androidx.recyclerview.widget.RecyclerView
         android:layout_marginTop="50dp"
         android:layout_width="match_parent"

@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#D8AA9B"
+    android:background="#F8F8F6"
    >
     <android.widget.Toolbar
         android:id="@+id/toolbar2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
+        android:background="@color/colorAccent"
         android:gravity="center_horizontal"
         android:textAlignment="center"
 
@@ -29,11 +29,11 @@
         android:layout_height="match_parent"
         android:text="name"
         android:textStyle="italic"
-        android:textSize="30sp"
-        android:layout_marginLeft="50dp"
+        android:textSize="20sp"
+        android:layout_marginLeft="40dp"
         android:id="@+id/toolbarname"
-        android:textColor="#FFF"
-        />
+        android:textColor="#090606"
+        android:layout_marginStart="40dp" />
     </android.widget.Toolbar>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -62,7 +62,7 @@
             android:layout_height="wrap_content"
             android:hint="type a message"
             android:layout_toLeftOf="@+id/send"
-             />
+            android:layout_toStartOf="@+id/send" />
 
         <ImageButton
             android:id="@+id/send"
@@ -74,6 +74,21 @@
             app:srcCompat="@drawable/forwardmessage" />
 
     </RelativeLayout>
+
+    <TextView
+        android:id="@+id/online_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/toolbar2"
+        android:layout_alignParentEnd="true"
+
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="34dp"
+        android:layout_marginRight="34dp"
+        android:layout_marginBottom="17dp"
+        android:text="TextView"
+        android:textColor="#0B0808"
+        android:textSize="15sp" />
 
 
 </RelativeLayout>

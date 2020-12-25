@@ -14,7 +14,7 @@
         android:text="LOGIN"
         android:textAlignment="center"
         android:textColor="#EAE8E8"
-        android:textSize="25dp"
+        android:textSize="25sp"
         android:textStyle="bold"
 
         app:layout_constraintBottom_toBottomOf="parent"
@@ -33,12 +33,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ncc" />
+        app:srcCompat="@drawable/ncc"
+        />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="300dp"
-        android:layout_height="450dp"
+        android:layout_height="wrap_content"
         app:cardCornerRadius="40dp"
         app:contentPadding="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -57,17 +58,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginLeft="15dp"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="30dp"
                 android:layout_marginRight="15dp"
 
-                android:hint="email address" />
+                android:autofillHints=""
+                android:hint="email address"
+                android:inputType="textEmailAddress" />
 
             <EditText
                 android:id="@+id/password"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginLeft="15dp"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="30dp"
                 android:layout_marginRight="15dp"
                 android:ems="10"
                 android:hint="password"
@@ -77,42 +80,49 @@
                 android:id="@+id/login1"
                 android:layout_width="100dp"
                 android:layout_height="50dp"
+
                 android:layout_marginStart="80dp"
                 android:layout_marginLeft="80dp"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="30dp"
                 android:background="#36CCDF"
                 android:text="login" />
 
             <TextView
                 android:id="@+id/register1"
                 android:layout_width="wrap_content"
-                android:layout_height="25dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="40dp"
                 android:layout_marginLeft="40dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="20dp"
+                android:background="?android:attr/selectableItemBackground"
                 android:clickable="true"
+                android:focusable="true"
                 android:text="new user? sign in here"
                 android:textColor="#3B3BF8"
-                android:textSize="20dp" />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/forgot_password"
                 android:layout_width="wrap_content"
-                android:layout_height="25dp"
+                android:layout_height="30dp"
                 android:layout_marginStart="55dp"
                 android:layout_marginLeft="48dp"
                 android:layout_marginTop="15dp"
+                android:background="?android:attr/selectableItemBackground"
                 android:clickable="true"
+                android:focusable="true"
                 android:text="forgot password?"
                 android:textColor="#3B3BF8"
-                android:textSize="20dp" />
+                android:textSize="20sp" />
 
             <ProgressBar
                 android:id="@+id/progressBar2"
                 style="?android:attr/progressBarStyle"
-                android:layout_width="91dp"
-                android:layout_height="40dp"
+                android:layout_width="50dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="110dp"
                 android:layout_marginLeft="80dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="10dp"
                 android:visibility="invisible" />
 
 

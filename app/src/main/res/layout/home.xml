@@ -23,16 +23,30 @@
                 android:gravity="center_horizontal"
                 app:title="Home"
 
-                app:titleTextColor="#FFF"
+                app:titleTextColor="#100E0E"
 
 
                 tools:ignore="HardcodedText" />
 
+            <TextView
+                android:id="@+id/topnews"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+               android:layout_marginTop="60dp"
+                android:textColor="#03040E"
+
+                android:gravity="center_horizontal"
+         android:text="top headlines"
+                android:textStyle="italic"
+                android:textAlignment="center"
+                    android:textSize="20sp"
+
+                />
 
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview2"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="85dp"
             android:scrollbars="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

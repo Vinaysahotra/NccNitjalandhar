@@ -12,13 +12,14 @@
     <ImageView
         android:id="@+id/full"
         android:layout_width="match_parent"
-        android:layout_height="485dp"
+        android:layout_height="500dp"
+        android:padding="10dp"
         tools:srcCompat="@tools:sample/avatars" />
 
     <Button
         android:id="@+id/saveimage"
         android:layout_width="100dp"
-        android:layout_height="30dp"
+        android:layout_height="50dp"
         android:layout_marginLeft="140dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/gradient_2"
@@ -26,18 +27,20 @@
         android:text="save"
         android:textAllCaps="true"
         android:textColor="#FFFF"
-        android:textSize="20dp" />
+        android:textSize="20sp"
+        android:layout_marginStart="140dp" />
 
     <Button
         android:id="@+id/next"
         android:layout_width="100dp"
-        android:layout_height="30dp"
+        android:layout_height="50dp"
         android:layout_marginLeft="140dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/gradient_2"
 
-        android:text="next"
+        android:text="home"
         android:textAllCaps="true"
         android:textColor="#FFFF"
-        android:textSize="20dp" />
+        android:textSize="20sp"
+        android:layout_marginStart="140dp" />
 </LinearLayout>

@@ -5,21 +5,23 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityOptionsCompat;
-import androidx.core.util.Pair;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.view.GravityCompat;
-import androidx.core.view.ViewCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.annotation.SuppressLint;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -28,15 +30,25 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.nccnitjalandhar.adapters.newsAdapter;
 import com.example.nccnitjalandhar.api.ApiInterface;
 import com.example.nccnitjalandhar.api.Apiclient;
+import com.example.nccnitjalandhar.api.utils;
 import com.example.nccnitjalandhar.news_model.Article;
 import com.example.nccnitjalandhar.news_model.News;
+import com.example.nccnitjalandhar.registerations.login;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
@@ -44,6 +56,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -66,12 +79,9 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager layoutManager;
     private List<Article> articles=new ArrayList<>();
     private newsAdapter adapter;
-    DatabaseReference reference;
     private StorageReference mstorage;
     ImageView imageView;
     private  static int GALLERY_REQUEST=123;
-    String name;
-    String email;
     TextView navusername;
     ProgressBar profilepicload;
     TextView emailuser;
@@ -79,10 +89,7 @@ public class MainActivity extends AppCompatActivity {
     FirebaseAuth mauth;
     FirebaseUser currentuser;
     String userId;
-    private SwipeRefreshLayout swipeRefreshLayout;
-private static final int PICK_IMAGE=1;
-    private int id;
-
+    GoogleSignInClient client;
     @SuppressLint("ResourceAsColor")
     @Override
 protected void onCreate(Bundle savedInstanceState) {
@@ -93,17 +100,24 @@ protected void onCreate(Bundle savedInstanceState) {
         drawerlayout =findViewById(R.id.drawer);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+final GoogleSignInAccount googleSignInAccount= GoogleSignIn.getLastSignedInAccount(this);
 
         toggle=new ActionBarDrawerToggle(this,drawerlayout,toolbar,R.string.open,R.string.close);
         drawerlayout.addDrawerListener(toggle);
         toggle.syncState();
-
 mauth=FirebaseAuth.getInstance();
 fsotore=FirebaseFirestore.getInstance();
+        View headerview=nav.getHeaderView(0);
+        navusername=headerview.findViewById(R.id.name);
+        emailuser = headerview.findViewById(R.id.usermail);
+        imageView=headerview.findViewById(R.id.profile_photo);
 currentuser=mauth.getCurrentUser();
         mstorage = FirebaseStorage.getInstance().getReference();
 userId= mauth.getCurrentUser().getUid();
+
+
+
+
 
  StorageReference profilepic=mstorage.child("users/"+mauth.getCurrentUser().getUid()+"/images");
         profilepic.child("users/" + mauth.getCurrentUser().getUid() + "/images");
@@ -119,10 +133,8 @@ userId= mauth.getCurrentUser().getUid();
 
 
         });
-        View headerview=nav.getHeaderView(0);
-         navusername=headerview.findViewById(R.id.name);
-         emailuser = headerview.findViewById(R.id.usermail);
-        imageView=headerview.findViewById(R.id.profile_photo);
+
+
         profilepicload=headerview.findViewById(R.id.loadingphoto);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,11 +154,16 @@ userId= mauth.getCurrentUser().getUid();
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
 
+                assert value != null;
                 if(value.exists())
                 {
 
                     navusername.setText(value.getString("fname"));
                     emailuser.setText(value.getString("email"));
+                }
+                else if(googleSignInAccount!=null){
+                    navusername.setText(googleSignInAccount.getDisplayName());
+                    emailuser.setText(googleSignInAccount.getEmail());
                 }
             }
         });
@@ -179,15 +196,16 @@ userId= mauth.getCurrentUser().getUid();
                     startActivity(i3);
                     break;
                 case R.id.menu_contacts:
-                    Toast.makeText(getApplicationContext(),"contacts opened",Toast.LENGTH_LONG).show();
+
                     drawerlayout.closeDrawer(GravityCompat.START);
                     Intent i2=new Intent(MainActivity.this,contacts.class);
                     startActivity(i2);
                     break;
                 case R.id.logout:
                     drawerlayout.closeDrawer(GravityCompat.START);
+
+                    Intent i4=new Intent(MainActivity.this, login.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     mauth.signOut();
-                    Intent i4=new Intent(MainActivity.this,login.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(i4);
                        finish();
                     break;
@@ -208,6 +226,7 @@ userId= mauth.getCurrentUser().getUid();
       loadJdson();
 
 
+
 }
 
     @Override
@@ -218,7 +237,7 @@ userId= mauth.getCurrentUser().getUid();
 
             return;
         }
-        if (requestCode == GALLERY_REQUEST&& resultCode==RESULT_OK&&data!=null) {
+        if (requestCode == GALLERY_REQUEST && data != null) {
 profilepicload.setVisibility(View.VISIBLE);
             final Uri imagedata=data.getData();
 
@@ -227,6 +246,7 @@ profilepicload.setVisibility(View.VISIBLE);
 
             final StorageReference fileRef = mstorage.child("users/"+mauth.getCurrentUser().getUid()+"/images");
 
+            assert imagedata != null;
             fileRef.putFile(imagedata)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
@@ -263,7 +283,7 @@ profilepicload.setVisibility(View.GONE);
 
     ApiInterface apiInterface= Apiclient.getApiclient().create(ApiInterface.class);
     Call<News> call;
-    String country=utils.getCountry();
+    String country= utils.getCountry();
     call=apiInterface.getNews(country,API_KEY);
     call.enqueue(new Callback<News>() {
         @Override
@@ -274,6 +294,7 @@ profilepicload.setVisibility(View.GONE);
                     articles.clear();
                 }
                 articles=response.body().getArticle();
+
                 adapter=new newsAdapter(articles,MainActivity.this);
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
@@ -316,26 +337,6 @@ private void initListener(){
             }
         });
 }
-    private void status(String status){
-        reference=FirebaseDatabase.getInstance().getReference("users").child(currentuser.getUid());
-        HashMap<String,Object>map=new HashMap<>();
-        map.put("status",status);
-        reference.updateChildren(map);
-
-    }
-
-    @Override
-    protected void onResume() {
-
-        super.onResume();
-        status("online");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        status("offline");
-    }
 
 
 

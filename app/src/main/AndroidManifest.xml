@@ -20,7 +20,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".chats"></activity>
+
+        <activity android:name=".chats" />
         <activity android:name=".news" />
         <activity android:name=".pdfview" />
         <activity android:name=".splash">
@@ -30,16 +31,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".login" />
+        <activity android:name=".registerations.login" />
         <activity android:name=".pdf" />
         <activity android:name=".contacts" />
         <activity android:name=".fullscreen" />
-        <activity android:name=".registeration" />
+        <activity android:name=".registerations.registeration" />
         <activity
             android:name=".gallery"
             tools:ignore="GoogleAppIndexingWarning,Instantiatable" />
         <activity android:name=".termsandcondition" />
         <activity android:name=".MainActivity" />
+
     </application>
 
 </manifest>

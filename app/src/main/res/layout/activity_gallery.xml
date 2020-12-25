@@ -4,24 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     >
-
-
     <TextView
         android:id="@+id/textView4"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-
-
-        android:layout_weight="1"
-        android:background="@color/colorPrimary"
+        android:background="@color/colorAccent"
         android:gravity="center_horizontal"
         android:text="gallery"
         android:textAlignment="center"
-        android:textColor="#FFF"
+        android:textColor="#030304"
         android:textSize="30dp" />
 
     <GridView
@@ -30,13 +24,12 @@
         android:layout_height="match_parent"
         android:layout_marginTop="50dp"
         android:numColumns="3"
+        android:padding="2dp"
         android:horizontalSpacing="10dp"
         android:columnWidth="90dp"
         android:verticalSpacing="10dp"
         android:gravity="center"
         android:stretchMode="columnWidth" />
-
-
 
 
 </RelativeLayout>
