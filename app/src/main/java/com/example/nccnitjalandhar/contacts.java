@@ -5,6 +5,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.Toolbar;
 
@@ -35,6 +37,7 @@ FirebaseAuth firebaseAuth;
 FirebaseUser user;
 RecyclerView recyclerView;
 DatabaseReference reference;
+ProgressBar progressBar;
 contactsadapter myadapter;
 androidx.appcompat.widget.Toolbar appBarLayout;
 Uri images[];
@@ -47,12 +50,13 @@ private List<userinfo> musers;
         recyclerView=findViewById(R.id.recylerv_view_contact);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         appBarLayout=findViewById(R.id.textView1);
+        progressBar=findViewById(R.id.contacts_progressBar);
 setSupportActionBar(appBarLayout);
         recyclerView.setHasFixedSize(true);
        reference=FirebaseDatabase.getInstance().getReference().child(FirebaseAuth.getInstance().getUid());
 musers=new ArrayList<>();
 
-
+progressBar.setVisibility(View.VISIBLE);
 
 firebaseAuth=FirebaseAuth.getInstance();
 user=firebaseAuth.getCurrentUser();
@@ -67,6 +71,7 @@ user=firebaseAuth.getCurrentUser();
       getMenuInflater().inflate(R.menu.main_menu,menu);
        final MenuItem item=menu.findItem(R.id.search);
       final   androidx.appcompat.widget.SearchView searchView= (androidx.appcompat.widget.SearchView) item.getActionView();
+        searchView.setQueryHint("Search cadet");
         searchView.setOnQueryTextListener(new androidx.appcompat.widget.SearchView.OnQueryTextListener(){
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -104,7 +109,7 @@ musers.clear();
                 recyclerView.setAdapter(myadapter);
 
 
-
+progressBar.setVisibility(View.GONE);
             }
 
             @Override

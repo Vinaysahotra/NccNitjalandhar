@@ -1,33 +1,31 @@
 package com.example.nccnitjalandhar;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.annotation.SuppressLint;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.nccnitjalandhar.adapters.newsAdapter;
@@ -40,23 +38,17 @@ import com.example.nccnitjalandhar.registerations.login;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -83,10 +75,12 @@ public class MainActivity extends AppCompatActivity {
     ImageView imageView;
     private  static int GALLERY_REQUEST=123;
     TextView navusername;
+    ProgressBar home_pro;
     ProgressBar profilepicload;
     TextView emailuser;
     FirebaseFirestore fsotore;
     FirebaseAuth mauth;
+
     FirebaseUser currentuser;
     String userId;
     GoogleSignInClient client;
@@ -95,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
 protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.home);
-
+home_pro=findViewById(R.id.home_progressBar);
         nav= findViewById(R.id.navmenu);
         drawerlayout =findViewById(R.id.drawer);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -190,10 +184,12 @@ userId= mauth.getCurrentUser().getUid();
                     startActivity(i1);
                     break;
                 case R.id.menu_pdf:
+                    home_pro.setVisibility(View.VISIBLE);
                     Toast.makeText(getApplicationContext(),"opening pdfs",Toast.LENGTH_LONG).show();
                     drawerlayout.closeDrawer(GravityCompat.START);
                     Intent i3=new Intent(MainActivity.this,pdf.class);
                     startActivity(i3);
+                    home_pro.setVisibility(View.GONE);
                     break;
                 case R.id.menu_contacts:
 
@@ -223,7 +219,7 @@ userId= mauth.getCurrentUser().getUid();
         recyclerView.setNestedScrollingEnabled(false);
         adapter=new newsAdapter(articles,this);
         recyclerView.setAdapter(adapter);
-      loadJdson();
+      loadJdson("");
 
 
 
@@ -278,13 +274,19 @@ profilepicload.setVisibility(View.GONE);
         }
 
 
-    public void loadJdson(){
+    public void loadJdson( final String Keyword){
 
 
     ApiInterface apiInterface= Apiclient.getApiclient().create(ApiInterface.class);
     Call<News> call;
-    String country= utils.getCountry();
-    call=apiInterface.getNews(country,API_KEY);
+        String country= utils.getCountry();
+        String language=utils.getLanguage();
+    if(Keyword.length()>0){
+        call=apiInterface.getNewsSearch(Keyword,language,"publishedAt",API_KEY);
+    }
+else {
+        call = apiInterface.getNews(country, API_KEY);
+    }
     call.enqueue(new Callback<News>() {
         @Override
         public void onResponse(Call<News> call, Response<News> response) {
@@ -337,7 +339,58 @@ private void initListener(){
             }
         });
 }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu,menu);
+        final MenuItem item=menu.findItem(R.id.search);
+        SearchManager  searchManager= (SearchManager) getSystemService(Context.SEARCH_SERVICE);
 
+        final   androidx.appcompat.widget.SearchView searchView= (androidx.appcompat.widget.SearchView) item.getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setQueryHint("Search latest news");
+
+
+        searchView.setOnQueryTextListener(new androidx.appcompat.widget.SearchView.OnQueryTextListener(){
+            @Override
+            public boolean onQueryTextSubmit(String query){
+                if(query.length()>2){
+                    loadJdson(query);
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                   loadJdson(newText);
+                return false;
+            }
+        });
+        item.getIcon().setVisible(false,false);
+        return true;
+    }
+
+    public class data extends AsyncTask<String, Void, String[]> {
+
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String[] doInBackground(String... strings) {
+            try{
+
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            return  strings;
+        }
+        @Override
+        protected void onPostExecute(String[] strings) {
+            super.onPostExecute(strings);
+        }
+    }
 
 
 

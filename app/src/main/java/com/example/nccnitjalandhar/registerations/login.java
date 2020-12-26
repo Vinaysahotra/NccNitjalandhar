@@ -1,4 +1,4 @@
-package com.example.nccnitjalandhar;
+package com.example.nccnitjalandhar.registerations;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
@@ -21,14 +20,14 @@ import android.widget.Toast;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.basgeekball.awesomevalidation.utility.RegexTemplate;
+import com.example.nccnitjalandhar.R;
+import com.example.nccnitjalandhar.termsandcondition;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-
-import java.util.ArrayList;
 
 public class login extends AppCompatActivity {
 
@@ -102,7 +101,7 @@ fauth=FirebaseAuth.getInstance();
         signin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i=new Intent(login.this,registeration.class);
+                Intent i=new Intent(login.this, registeration.class);
                 startActivity(i);
             }
         });
@@ -122,7 +121,7 @@ fauth=FirebaseAuth.getInstance();
                             if (task.isSuccessful()) {
                                 Toast.makeText(login.this, "login successful", Toast.LENGTH_SHORT).show();
 
-                                startActivity(new Intent(getApplicationContext(),termsandcondition.class));
+                                startActivity(new Intent(getApplicationContext(), termsandcondition.class));
                                 finish();
                             } else {
                                 progressBar.setVisibility(View.GONE);

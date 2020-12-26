@@ -1,4 +1,4 @@
-package com.example.nccnitjalandhar;
+package com.example.nccnitjalandhar.api;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
