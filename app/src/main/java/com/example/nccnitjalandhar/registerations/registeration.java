@@ -18,7 +18,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.basgeekball.awesomevalidation.utility.RegexTemplate;
-import com.example.nccnitjalandhar.MainActivity;
 import com.example.nccnitjalandhar.R;
 import com.example.nccnitjalandhar.termsandcondition;
 import com.example.nccnitjalandhar.userinfo;
@@ -42,62 +41,61 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class registeration extends AppCompatActivity {
-   private EditText username;
-   private EditText email;
+    private EditText username;
+    private EditText email;
     Button sign_in;
     TextView alreadyuser;
-    AwesomeValidation awesomeValidation ;
+    AwesomeValidation awesomeValidation;
     FirebaseFirestore fstore;
-   private EditText setpassword;
-   ProgressBar progressBar;
-private  static final int RC_SIGN_IN=123;
-   DatabaseReference data;
-    private  FirebaseAuth mAuth;
-     String userID;
-    private  GoogleSignInClient client;
+    private EditText setpassword;
+    ProgressBar progressBar;
+    private static final int RC_SIGN_IN = 123;
+    DatabaseReference data;
+    private FirebaseAuth mAuth;
+    String userID;
+    private GoogleSignInClient client;
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registeruser);
-        sign_in=findViewById(R.id.signin);
-        setpassword=findViewById(R.id.setpassword);
-        email=findViewById(R.id.email);
-        alreadyuser=findViewById(R.id.alreadyuser);
-        username=findViewById(R.id.username);
+        sign_in = findViewById(R.id.signin);
+        setpassword = findViewById(R.id.setpassword);
+        email = findViewById(R.id.email);
+        alreadyuser = findViewById(R.id.alreadyuser);
+        username = findViewById(R.id.username);
         SignInButton signInButton_google = findViewById(R.id.sign_in_google);
-        progressBar=findViewById(R.id.progressBar1);
-awesomeValidation=new AwesomeValidation(ValidationStyle.BASIC);
+        progressBar = findViewById(R.id.progressBar1);
+        awesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
         awesomeValidation.addValidation(this, R.id.username, RegexTemplate.NOT_EMPTY, R.string.invalid);
         awesomeValidation.addValidation(this, R.id.email, Patterns.EMAIL_ADDRESS, R.string.mail);
         awesomeValidation.addValidation(this, R.id.setpassword, ".{6,}", R.string.invalidpassword);
         mAuth = FirebaseAuth.getInstance();
 
 
-        GoogleSignInOptions options=new GoogleSignInOptions
+        GoogleSignInOptions options = new GoogleSignInOptions
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
 
-        client= GoogleSignIn.getClient(this,options);
-signInButton_google.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View view) {
-        progressBar.setVisibility(View.VISIBLE);
-        Intent signIntent=client.getSignInIntent();
-        startActivityForResult(signIntent,RC_SIGN_IN);
-    }
-});
+        client = GoogleSignIn.getClient(this, options);
+        signInButton_google.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                progressBar.setVisibility(View.VISIBLE);
+                Intent signIntent = client.getSignInIntent();
+                startActivityForResult(signIntent, RC_SIGN_IN);
+            }
+        });
 
 
-        fstore=FirebaseFirestore.getInstance();
+        fstore = FirebaseFirestore.getInstance();
         alreadyuser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -106,122 +104,124 @@ signInButton_google.setOnClickListener(new View.OnClickListener() {
 
             }
         });
-sign_in.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View view) {
-        if (awesomeValidation.validate()) {
-            String textemail = email.getText().toString().trim();
-            String textusername = username.getText().toString().trim();
-            String textpassword= setpassword.getText().toString().trim();
-            progressBar.setVisibility(View.VISIBLE);
-            registeruser(textemail,textpassword,textusername);
-        }
-    }
+        sign_in.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (awesomeValidation.validate()) {
+                    String textemail = email.getText().toString().trim();
+                    String textusername = username.getText().toString().trim();
+                    String textpassword = setpassword.getText().toString().trim();
+                    progressBar.setVisibility(View.VISIBLE);
+                    registeruser(textemail, textpassword, textusername);
+                }
+            }
 
-    private void registeruser(final String textemail, String textpassword, final String username1) {
+            private void registeruser(final String textemail, String textpassword, final String username1) {
 
-        mAuth.createUserWithEmailAndPassword(textemail, textpassword)
-                .addOnCompleteListener(registeration.this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
+                mAuth.createUserWithEmailAndPassword(textemail, textpassword)
+                        .addOnCompleteListener(registeration.this, new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
 
-                        if (task.isSuccessful()) {
-                            Toast.makeText(registeration.this, "signed in",Toast.LENGTH_SHORT).show();
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(registeration.this, "signed in", Toast.LENGTH_SHORT).show();
 
-                            userID=mAuth.getCurrentUser().getUid();
+                                    userID = mAuth.getCurrentUser().getUid();
 
-                            data= FirebaseDatabase.getInstance().getReference("users").child(userID);
-                            userinfo classuser=new userinfo(textemail,username1,"default",userID,"offline");
-                            data.setValue(classuser);
-                            DocumentReference documentReference=fstore.collection("users").document(userID);
-                            Map<String,Object>user=new HashMap<>();
-                            user.put("fname",username1);
-                            user.put("email",textemail);
-                            documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                   Log.d("users","profile is created"+userID);
+                                    data = FirebaseDatabase.getInstance().getReference("users").child(userID);
+                                    userinfo classuser = new userinfo(textemail, username1, "default", userID, "offline");
+                                    data.setValue(classuser);
+                                    DocumentReference documentReference = fstore.collection("users").document(userID);
+                                    Map<String, Object> user = new HashMap<>();
+                                    user.put("fname", username1);
+                                    user.put("email", textemail);
+                                    documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Log.d("users", "profile is created" + userID);
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.d("users", "error is" + e.toString());
+                                        }
+                                    });
+                                    startActivity(new Intent(getApplicationContext(), login.class));
+                                    finish();
+
+                                } else {
+                                    progressBar.setVisibility(View.GONE);
+
+                                    Toast.makeText(registeration.this, "Authentication failed.",
+                                            Toast.LENGTH_SHORT).show();
+
                                 }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.d("users","error is"+e.toString());
-                                }
-                            });
-                            startActivity(new Intent(getApplicationContext(),login.class));
-                            finish();
-
-                        } else {
-                            progressBar.setVisibility(View.GONE);
-
-                            Toast.makeText(registeration.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-
-                        }
-                    }
-                });
-    }
-});
+                            }
+                        });
+            }
+        });
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-    if (requestCode == RC_SIGN_IN) {
-        Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-        try {
-            GoogleSignInAccount account=task.getResult(ApiException.class);
-            assert account != null;
-            firebaseGoogle(account.getIdToken());
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                assert account != null;
+                firebaseGoogle(account.getIdToken());
 
-        } catch (ApiException e) {
-            Toast.makeText(registeration.this,"error is"+ e,Toast.LENGTH_SHORT).show();
+            } catch (ApiException e) {
+                Toast.makeText(registeration.this, "error is" + e, Toast.LENGTH_SHORT).show();
 
 
+            }
         }
     }
-}
 
     private void firebaseGoogle(String idToken) {
-        AuthCredential authCredential= GoogleAuthProvider.getCredential(idToken,null);
+        AuthCredential authCredential = GoogleAuthProvider.getCredential(idToken, null);
         mAuth.signInWithCredential(authCredential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()){
-                    FirebaseUser user=mAuth.getCurrentUser();
+                if (task.isSuccessful()) {
+                    FirebaseUser user = mAuth.getCurrentUser();
                     assert user != null;
                     updateUI(user);
 
-                    startActivity(new Intent(getApplicationContext(), termsandcondition.class));
-                    finish();
 
-                }
-                else {
-                    Toast.makeText(registeration.this,"google not linked ",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(registeration.this, "google not linked ", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
-    private void updateUI(FirebaseUser user) {
 
-        data= FirebaseDatabase.getInstance().getReference("users").child(user.getUid());
-        userinfo classuser=new userinfo(user.getEmail(),user.getDisplayName(),"default",user.getUid(),"offline");
-        data.setValue(classuser);
-        DocumentReference documentReference=fstore.collection("users").document(user.getUid());
-        Map<String,Object>user1=new HashMap<>();
-        user1.put("fname",user.getDisplayName());
-        user1.put("email",user.getEmail());
+    private void updateUI(@NonNull FirebaseUser user) {
+
+        data = FirebaseDatabase.getInstance().getReference("users").child(user.getUid());
+
+        userinfo classuser = new userinfo(user.getEmail(), user.getDisplayName(), "default", user.getUid(), "offline");
+      data.setValue(classuser);
+        DocumentReference documentReference = fstore.collection("users").document(user.getUid());
+        Map<String, Object> user1 = new HashMap<>();
+        user1.put("fname", user.getDisplayName());
+        user1.put("email", user.getEmail());
         documentReference.set(user1).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 progressBar.setVisibility(View.GONE);
-                Toast.makeText(registeration.this,"Sign in done..",Toast.LENGTH_SHORT).show();
+                Toast.makeText(registeration.this, "Sign in done..", Toast.LENGTH_SHORT).show();
+
+                startActivity(new Intent(getApplicationContext(), termsandcondition.class));
+                finish();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.d("users","error is"+e.toString());
+                Log.d("users", "error is" + e.toString());
             }
         });
-        }
+    }
 }

@@ -64,11 +64,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
-    <RadioButton
+    <CheckBox
         android:id="@+id/radioButton"
         android:layout_width="246dp"
         android:layout_height="wrap_content"
-
+android:checked="false"
         android:layout_marginTop="32dp"
         android:text="I, agree to terms and conditions"
         android:textColor="#0226EF"
