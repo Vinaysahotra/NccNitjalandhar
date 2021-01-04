@@ -66,60 +66,56 @@ public class MainActivity extends AppCompatActivity {
     NavigationView nav;
     ActionBarDrawerToggle toggle;
     DrawerLayout drawerlayout;
-    public  static final String API_KEY="5fc9a3838f594871a2fdee0fe2ff7ecf";
+    public static final String API_KEY = "5fc9a3838f594871a2fdee0fe2ff7ecf";
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
-    private List<Article> articles=new ArrayList<>();
+    private List<Article> articles = new ArrayList<>();
     private newsAdapter adapter;
     private StorageReference mstorage;
     ImageView imageView;
-    private  static int GALLERY_REQUEST=123;
+    private static int GALLERY_REQUEST = 123;
     TextView navusername;
     ProgressBar home_pro;
     ProgressBar profilepicload;
     TextView emailuser;
     FirebaseFirestore fsotore;
     FirebaseAuth mauth;
-
+GoogleSignInClient client;
     FirebaseUser currentuser;
     String userId;
-    GoogleSignInClient client;
+
     @SuppressLint("ResourceAsColor")
     @Override
-protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.home);
-home_pro=findViewById(R.id.home_progressBar);
-        nav= findViewById(R.id.navmenu);
-        drawerlayout =findViewById(R.id.drawer);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.home);
+        home_pro = findViewById(R.id.home_progressBar);
+        nav = findViewById(R.id.navmenu);
+        drawerlayout = findViewById(R.id.drawer);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-final GoogleSignInAccount googleSignInAccount= GoogleSignIn.getLastSignedInAccount(this);
-
-        toggle=new ActionBarDrawerToggle(this,drawerlayout,toolbar,R.string.open,R.string.close);
+        final GoogleSignInAccount googleSignInAccount = GoogleSignIn.getLastSignedInAccount(this);
+        toggle = new ActionBarDrawerToggle(this, drawerlayout, toolbar, R.string.open, R.string.close);
         drawerlayout.addDrawerListener(toggle);
         toggle.syncState();
-mauth=FirebaseAuth.getInstance();
-fsotore=FirebaseFirestore.getInstance();
-        View headerview=nav.getHeaderView(0);
-        navusername=headerview.findViewById(R.id.name);
+        mauth = FirebaseAuth.getInstance();
+        fsotore = FirebaseFirestore.getInstance();
+        View headerview = nav.getHeaderView(0);
+        navusername = headerview.findViewById(R.id.name);
         emailuser = headerview.findViewById(R.id.usermail);
-        imageView=headerview.findViewById(R.id.profile_photo);
-currentuser=mauth.getCurrentUser();
+        imageView = headerview.findViewById(R.id.profile_photo);
+        currentuser = mauth.getCurrentUser();
         mstorage = FirebaseStorage.getInstance().getReference();
-userId= mauth.getCurrentUser().getUid();
+        userId = mauth.getCurrentUser().getUid();
 
 
-
-
-
- StorageReference profilepic=mstorage.child("users/"+mauth.getCurrentUser().getUid()+"/images");
+        StorageReference profilepic = mstorage.child("users/" + mauth.getCurrentUser().getUid() + "/images");
         profilepic.child("users/" + mauth.getCurrentUser().getUid() + "/images");
         profilepic.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-                if(uri!=null) {
-                    Glide.with(MainActivity.this).load(uri).into(imageView);
+                if (uri != null) {
+                    Glide.with(getApplicationContext()).load(uri).into(imageView);
 
 
                 }
@@ -129,7 +125,7 @@ userId= mauth.getCurrentUser().getUid();
         });
 
 
-        profilepicload=headerview.findViewById(R.id.loadingphoto);
+        profilepicload = headerview.findViewById(R.id.loadingphoto);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -137,93 +133,98 @@ userId= mauth.getCurrentUser().getUid();
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult( Intent.createChooser(intent,"pick an image"),GALLERY_REQUEST);
+                startActivityForResult(Intent.createChooser(intent, "pick an image"), GALLERY_REQUEST);
 
             }
         });
 
-        DocumentReference documentReference=fsotore.collection("users").document(userId);
-        if(mauth.getCurrentUser()!=null)
-        documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+        final DocumentReference documentReference = fsotore.collection("users").document(userId);
 
-                assert value != null;
-                if(value.exists())
-                {
-
-                    navusername.setText(value.getString("fname"));
-                    emailuser.setText(value.getString("email"));
-                }
-                else if(googleSignInAccount!=null){
-                    navusername.setText(googleSignInAccount.getDisplayName());
-                    emailuser.setText(googleSignInAccount.getEmail());
-                }
-            }
-        });
-
-
-    nav.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-
+    documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
         @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
-            switch (item.getItemId()){
-
-                case R.id.menu_home:
-                    Toast.makeText(getApplicationContext(),"refreshing news",Toast.LENGTH_LONG).show();
-
-                    drawerlayout.closeDrawer(GravityCompat.START);
+        public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
 
 
-                    break;
-                case R.id.menu_gallery:
-                    Toast.makeText(getApplicationContext(),"gallery opened",Toast.LENGTH_LONG).show();
-                    drawerlayout.closeDrawer(GravityCompat.START);
-                    Intent i1=new Intent(MainActivity.this,gallery.class);
-                    startActivity(i1);
-                    break;
-                case R.id.menu_pdf:
-                    home_pro.setVisibility(View.VISIBLE);
-                    Toast.makeText(getApplicationContext(),"opening pdfs",Toast.LENGTH_LONG).show();
-                    drawerlayout.closeDrawer(GravityCompat.START);
-                    Intent i3=new Intent(MainActivity.this,pdf.class);
-                    startActivity(i3);
-                    home_pro.setVisibility(View.GONE);
-                    break;
-                case R.id.menu_contacts:
+            assert value != null;
+            if (value.exists()) {
 
-                    drawerlayout.closeDrawer(GravityCompat.START);
-                    Intent i2=new Intent(MainActivity.this,contacts.class);
-                    startActivity(i2);
-                    break;
-                case R.id.logout:
-                    drawerlayout.closeDrawer(GravityCompat.START);
-
-                    Intent i4=new Intent(MainActivity.this, login.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    mauth.signOut();
-                    startActivity(i4);
-                       finish();
-                    break;
-
+                navusername.setText(value.getString("fname"));
+                emailuser.setText(value.getString("email"));
             }
-            return true;
+            else if(googleSignInAccount!=null){
+                navusername.setText(googleSignInAccount.getDisplayName());
+                emailuser.setText(googleSignInAccount.getEmail());
+            }
+
+
         }
     });
 
 
-        recyclerView=findViewById(R.id.recyclerview2);
-        layoutManager=new LinearLayoutManager(MainActivity.this);
+
+        nav.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+                switch (item.getItemId()) {
+
+                    case R.id.menu_home:
+                        Toast.makeText(getApplicationContext(), "refreshing news", Toast.LENGTH_LONG).show();
+
+                        drawerlayout.closeDrawer(GravityCompat.START);
+
+
+                        break;
+                    case R.id.menu_gallery:
+                        Toast.makeText(getApplicationContext(), "gallery opened", Toast.LENGTH_LONG).show();
+                        drawerlayout.closeDrawer(GravityCompat.START);
+                        Intent i1 = new Intent(MainActivity.this, gallery.class);
+                        startActivity(i1);
+                        break;
+                    case R.id.menu_pdf:
+                        home_pro.setVisibility(View.VISIBLE);
+                        Toast.makeText(getApplicationContext(), "opening pdfs", Toast.LENGTH_LONG).show();
+                        drawerlayout.closeDrawer(GravityCompat.START);
+                        Intent i3 = new Intent(MainActivity.this, pdf.class);
+                        startActivity(i3);
+                        home_pro.setVisibility(View.GONE);
+                        break;
+                    case R.id.menu_contacts:
+
+                        drawerlayout.closeDrawer(GravityCompat.START);
+                        Intent i2 = new Intent(MainActivity.this, contacts.class);
+                        startActivity(i2);
+                        break;
+                    case R.id.logout:
+
+                        drawerlayout.closeDrawer(GravityCompat.START);
+                        FirebaseAuth.getInstance().signOut();
+                        finish();
+                        Intent i4 = new Intent(MainActivity.this, login.class);
+                        startActivity(i4);
+
+
+                        break;
+
+
+                }
+                return true;
+            }
+        });
+
+
+        recyclerView = findViewById(R.id.recyclerview2);
+        layoutManager = new LinearLayoutManager(MainActivity.this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setNestedScrollingEnabled(false);
-        adapter=new newsAdapter(articles,this);
+        adapter = new newsAdapter(articles, this);
         recyclerView.setAdapter(adapter);
-      loadJdson("");
+        loadJdson("");
 
 
-
-}
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -234,13 +235,11 @@ userId= mauth.getCurrentUser().getUid();
             return;
         }
         if (requestCode == GALLERY_REQUEST && data != null) {
-profilepicload.setVisibility(View.VISIBLE);
-            final Uri imagedata=data.getData();
+            profilepicload.setVisibility(View.VISIBLE);
+            final Uri imagedata = data.getData();
 
 
-
-
-            final StorageReference fileRef = mstorage.child("users/"+mauth.getCurrentUser().getUid()+"/images");
+            final StorageReference fileRef = mstorage.child("users/" + mauth.getCurrentUser().getUid() + "/images");
 
             assert imagedata != null;
             fileRef.putFile(imagedata)
@@ -248,112 +247,110 @@ profilepicload.setVisibility(View.VISIBLE);
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-    @Override
-    public void onSuccess(Uri uri) {
-Glide.with(MainActivity.this).load(uri).into(imageView);
-        Map<String,Object>map=new HashMap<>();
-        map.put("email",emailuser.getText().toString());
-        map.put("profilepic",uri.toString());
-        map.put("username",navusername.getText().toString());
-        FirebaseDatabase.getInstance().getReference().child("users").child(userId).updateChildren(map);
-profilepicload.setVisibility(View.GONE);
-    }
-});
+                            fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    Glide.with(MainActivity.this).load(uri).into(imageView);
+                                    Map<String, Object> map = new HashMap<>();
+                                    map.put("email", emailuser.getText().toString());
+                                    map.put("profilepic", uri.toString());
+                                    map.put("username", navusername.getText().toString());
+                                    FirebaseDatabase.getInstance().getReference().child("users").child(userId).updateChildren(map);
+                                    profilepicload.setVisibility(View.GONE);
+                                }
+                            });
 
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception exception) {
-                           Toast.makeText(MainActivity.this,"error",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, "error", Toast.LENGTH_SHORT).show();
                         }
                     });
 
-            }
         }
-
-
-    public void loadJdson( final String Keyword){
-
-
-    ApiInterface apiInterface= Apiclient.getApiclient().create(ApiInterface.class);
-    Call<News> call;
-        String country= utils.getCountry();
-        String language=utils.getLanguage();
-    if(Keyword.length()>0){
-        call=apiInterface.getNewsSearch(Keyword,language,"publishedAt",API_KEY);
     }
-else {
-        call = apiInterface.getNews(country, API_KEY);
-    }
-    call.enqueue(new Callback<News>() {
-        @Override
-        public void onResponse(Call<News> call, Response<News> response) {
-            assert response.body() != null;
-            if(response.isSuccessful() && response.body().getArticle() != null){
-                if(!articles.isEmpty()){
-                    articles.clear();
+
+
+    public void loadJdson(final String Keyword) {
+
+
+        ApiInterface apiInterface = Apiclient.getApiclient().create(ApiInterface.class);
+        Call<News> call;
+        String country = utils.getCountry();
+        String language = utils.getLanguage();
+        if (Keyword.length() > 0) {
+            call = apiInterface.getNewsSearch(Keyword, language, "publishedAt", API_KEY);
+        } else {
+            call = apiInterface.getNews(country, API_KEY);
+        }
+        call.enqueue(new Callback<News>() {
+            @Override
+            public void onResponse(Call<News> call, Response<News> response) {
+                assert response.body() != null;
+                if (response.isSuccessful() && response.body().getArticle() != null) {
+                    if (!articles.isEmpty()) {
+                        articles.clear();
+                    }
+                    articles = response.body().getArticle();
+
+                    adapter = new newsAdapter(articles, MainActivity.this);
+                    recyclerView.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+
+                    initListener();
+
+                } else {
+                    Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
                 }
-                articles=response.body().getArticle();
+            }
 
-                adapter=new newsAdapter(articles,MainActivity.this);
-                recyclerView.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
-
-                initListener();
+            @Override
+            public void onFailure(Call<News> call, Throwable t) {
 
             }
-            else{
-                Toast.makeText(MainActivity.this,"Error",Toast.LENGTH_SHORT).show();
-            }
-        }
-
-        @Override
-        public void onFailure(Call<News> call, Throwable t) {
-
-        }
-    });
+        });
 
 
-}
-private void initListener(){
+    }
+
+    private void initListener() {
         adapter.setOnItemClickListener(new newsAdapter.OnItemClickListener() {
 
             @Override
             public void onItemClick(View view, int position) {
 
-                Intent i=new Intent(MainActivity.this,news.class);
-              Article article=articles.get(position);
-                i.putExtra("url",article.getUrl());
-              i.putExtra("title",article.getTitle());
-                i.putExtra("author",article.getAuthor());
-                i.putExtra("date",article.getPublishedAt());
-                i.putExtra("image",article.getUrlToImage());
-                i.putExtra("source",article.getSource().getName());
-
-
+                Intent i = new Intent(MainActivity.this, news.class);
+                Article article = articles.get(position);
+                i.putExtra("url", article.getUrl());
+                i.putExtra("title", article.getTitle());
+                i.putExtra("author", article.getAuthor());
+                i.putExtra("date", article.getPublishedAt());
+                i.putExtra("image", article.getUrlToImage());
+                i.putExtra("source", article.getSource().getName());
                 startActivity(i);
 
 
             }
         });
-}
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu,menu);
-        final MenuItem item=menu.findItem(R.id.search);
-        SearchManager  searchManager= (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        final MenuItem item = menu.findItem(R.id.search);
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
 
-        final   androidx.appcompat.widget.SearchView searchView= (androidx.appcompat.widget.SearchView) item.getActionView();
+        final androidx.appcompat.widget.SearchView searchView = (androidx.appcompat.widget.SearchView) item.getActionView();
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setQueryHint("Search latest news");
 
 
-        searchView.setOnQueryTextListener(new androidx.appcompat.widget.SearchView.OnQueryTextListener(){
+        searchView.setOnQueryTextListener(new androidx.appcompat.widget.SearchView.OnQueryTextListener() {
             @Override
-            public boolean onQueryTextSubmit(String query){
-                if(query.length()>2){
+            public boolean onQueryTextSubmit(String query) {
+                if (query.length() > 2) {
                     loadJdson(query);
                 }
                 return false;
@@ -361,37 +358,13 @@ private void initListener(){
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                   loadJdson(newText);
+                loadJdson(newText);
                 return false;
             }
         });
-        item.getIcon().setVisible(false,false);
+        item.getIcon().setVisible(false, false);
         return true;
     }
-
-    public class data extends AsyncTask<String, Void, String[]> {
-
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected String[] doInBackground(String... strings) {
-            try{
-
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-            return  strings;
-        }
-        @Override
-        protected void onPostExecute(String[] strings) {
-            super.onPostExecute(strings);
-        }
-    }
-
 
 
 
