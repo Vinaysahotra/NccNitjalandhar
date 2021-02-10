@@ -5,7 +5,6 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.Menu;
@@ -35,6 +34,13 @@ import com.example.nccnitjalandhar.api.utils;
 import com.example.nccnitjalandhar.news_model.Article;
 import com.example.nccnitjalandhar.news_model.News;
 import com.example.nccnitjalandhar.registerations.login;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.RequestConfiguration;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -54,6 +60,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -80,15 +87,44 @@ public class MainActivity extends AppCompatActivity {
     TextView emailuser;
     FirebaseFirestore fsotore;
     FirebaseAuth mauth;
-GoogleSignInClient client;
+    GoogleSignInClient client;
     FirebaseUser currentuser;
     String userId;
+    private AdView mAdView;
+    private AdRequest adRequest;
 
     @SuppressLint("ResourceAsColor")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+
+            }
+        });
+
+        mAdView = findViewById(R.id.adView);
+
+        adRequest = new AdRequest.Builder().addTestDevice("B673AD81FA6D2CD53A5F891A0A0C1EDD").setHttpTimeoutMillis(7000).build();
+
+        mAdView.loadAd(adRequest);
+
+
+
+        mAdView.setAdListener(new AdListener() {
+
+
+            @Override
+            public void onAdFailedToLoad(int errorCode) {
+                // Code to be executed when an ad request fails.
+
+            }
+
+
+        });
+
         home_pro = findViewById(R.id.home_progressBar);
         nav = findViewById(R.id.navmenu);
         drawerlayout = findViewById(R.id.drawer);
@@ -140,26 +176,24 @@ GoogleSignInClient client;
 
         final DocumentReference documentReference = fsotore.collection("users").document(userId);
 
-    documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
-        @Override
-        public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+        documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
 
 
-            assert value != null;
-            if (value.exists()) {
+                assert value != null;
+                if (value.exists()) {
 
-                navusername.setText(value.getString("fname"));
-                emailuser.setText(value.getString("email"));
+                    navusername.setText(value.getString("fname"));
+                    emailuser.setText(value.getString("email"));
+                } else if (googleSignInAccount != null) {
+                    navusername.setText(googleSignInAccount.getDisplayName());
+                    emailuser.setText(googleSignInAccount.getEmail());
+                }
+
+
             }
-            else if(googleSignInAccount!=null){
-                navusername.setText(googleSignInAccount.getDisplayName());
-                emailuser.setText(googleSignInAccount.getEmail());
-            }
-
-
-        }
-    });
-
+        });
 
 
         nav.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -365,7 +399,6 @@ GoogleSignInClient client;
         item.getIcon().setVisible(false, false);
         return true;
     }
-
 
 
 }
