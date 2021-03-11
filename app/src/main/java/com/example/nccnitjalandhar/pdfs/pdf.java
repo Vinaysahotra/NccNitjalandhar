@@ -1,4 +1,4 @@
-package com.example.nccnitjalandhar;
+package com.example.nccnitjalandhar.pdfs;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +15,7 @@ import android.os.Environment;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.nccnitjalandhar.R;
 import com.example.nccnitjalandhar.adapters.pdfrecyclerview;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
@@ -41,10 +42,10 @@ public class pdf extends AppCompatActivity {
         ArrayList<File>mypdf=getPdfFiles(Environment.getExternalStorageDirectory());
         item=new String[mypdf.size()];
 
-        recyclerview1=findViewById(R.id.recylerv_view);
+        recyclerview1=findViewById(R.id.recyler_view);
 
         for(int i=0;i<item.length;i++){
-            item[i]=mypdf.get(i).getName().replace(".pdf","");
+            item[i]=mypdf.get(i).getName();
         }
         adapter=new pdfrecyclerview(this,mnames,item);
         adapter=new pdfrecyclerview(this,mnames,item);
@@ -79,6 +80,7 @@ public class pdf extends AppCompatActivity {
         }
         return array;
     }
-    };
+};
+
 
 
